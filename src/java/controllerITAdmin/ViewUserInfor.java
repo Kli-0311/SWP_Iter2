@@ -20,10 +20,8 @@ import models.Account;
  *
  * @author khanh
  */
-
-//@WebServlet annotation: Định nghĩa servlet với tên là "ViewUserAccount" và ánh xạ nó tới URL /viewUserAccount.
-@WebServlet(name="ViewUserAccount", urlPatterns={"/viewUserAccount"})
-public class ViewUserAccount extends HttpServlet {
+@WebServlet(name="ViewUserInfor", urlPatterns={"/viewUserInfor"})
+public class ViewUserInfor extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -40,10 +38,10 @@ public class ViewUserAccount extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ViewUserAccount</title>");  
+            out.println("<title>Servlet ViewUserInfor</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ViewUserAccount at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ViewUserInfor at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -69,24 +67,24 @@ public class ViewUserAccount extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         String service = request.getParameter("service");
-        request.setAttribute("viewUserAccount", "Yes");
+        request.setAttribute("viewUserInfor", "Yes");
 
         if (service.equals("ViewListMentor")) {
             List<Account> listMentor = (new AdminDAO()).getAllMentor();
             request.setAttribute("listMentor", listMentor);
-            request.getRequestDispatcher("ViewUserAccount.jsp").forward(request, response);
+            request.getRequestDispatcher("ViewUserInfor.jsp").forward(request, response);
 
         }
         if (service.equals("ViewListIntern")) {
             List<Account> listIntern = (new AdminDAO()).getAllIntern();
             request.setAttribute("listIntern", listIntern);
-            request.getRequestDispatcher("ViewUserAccount.jsp").forward(request, response);
+            request.getRequestDispatcher("ViewUserInfor.jsp").forward(request, response);
 
         }
         if (service.equals("ViewListCandidate")) {
             List<Account> listCandidate = (new AdminDAO()).getAllCandidate();
             request.setAttribute("listCandidate", listCandidate);
-            request.getRequestDispatcher("ViewUserAccount.jsp").forward(request, response);
+            request.getRequestDispatcher("ViewUserInfor.jsp").forward(request, response);
 
         }
     } 

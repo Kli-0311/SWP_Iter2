@@ -6,6 +6,7 @@ package controllerITAdmin;
 
 import dal.AdminDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,12 +43,12 @@ public class CreateAccountCandidate extends HttpServlet {
                 request.getRequestDispatcher("createAccountCandidate.jsp").forward(request, response);
                 return;
             }
-            Account existingAccount = adminDao.searchAccountByUsername(username);
+            Account existingAccount = adminDao.getAccountByUsername(username);
             if (existingAccount != null) {
                 request.setAttribute("successMessage", "This username is already registered.");
                 request.getRequestDispatcher("createAccountCandidate.jsp").forward(request, response);
             } else {
-                adminDao.addAccountCandidate(user_id, username, role_id);
+                adminDao.createAccountCandidate(user_id, username, role_id);
                 request.setAttribute("successMessage", "Account created successfully");
                 request.getRequestDispatcher("createAccountCandidate.jsp").forward(request, response);
             }

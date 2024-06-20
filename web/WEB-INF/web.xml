@@ -39,8 +39,12 @@
         <servlet-class>controllerITAdmin.CreateAccountCandidate</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ViewUserAccount</servlet-name>
-        <servlet-class>controllerITAdmin.ViewUserAccount</servlet-class>
+        <servlet-name>ViewUserInfor</servlet-name>
+        <servlet-class>controllerITAdmin.ViewUserInfor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewAccount</servlet-name>
+        <servlet-class>controllerITAdmin.ViewAccount</servlet-class>
     </servlet>
     <!--chien-->
     <servlet>
@@ -55,6 +59,30 @@
         <servlet-name>ViewMember</servlet-name>
         <servlet-class>controllerIntern.ViewMember</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Certificate</servlet-name>
+        <servlet-class>controllerIntern.Certificate</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SubmitReport</servlet-name>
+        <servlet-class>controllerIntern.SubmitReport</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Message</servlet-name>
+        <servlet-class>controllerMentor.message</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddCertificate</servlet-name>
+        <servlet-class>controllerMentor.CertificateControll</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetCertificate</servlet-name>
+        <servlet-class>controllerMentor.GetCertificate</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewReport</servlet-name>
+        <servlet-class>controllerIntern.ViewReport</servlet-class>
+    </servlet>
     <!--huyen-->
     <servlet>
         <servlet-name>CheckAttendance</servlet-name>
@@ -64,6 +92,35 @@
         <servlet-name>ListInter</servlet-name>
         <servlet-class>controllerMentor.ListInter</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NewsManage</servlet-name>
+        <servlet-class>controllerLabManager.NewsManage</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteNews</servlet-name>
+        <servlet-class>controllerLabManager.DeleteNews</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddNews</servlet-name>
+        <servlet-class>controllerLabManager.AddNews</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadNews</servlet-name>
+        <servlet-class>controllerLabManager.LoadNews</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditNews</servlet-name>
+        <servlet-class>controllerLabManager.EditNews</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewNews</servlet-name>
+        <servlet-class>controllerLabManager.ViewNews</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchNews</servlet-name>
+        <servlet-class>controllerLabManager.SearchNews</servlet-class>
+    </servlet>
+    
     <!--dong-->
     <servlet>
         <servlet-name>RecruimentManage</servlet-name>
@@ -116,8 +173,12 @@
         <url-pattern>/createAccountCandidate</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ViewUserAccount</servlet-name>
-        <url-pattern>/viewUserAccount</url-pattern>
+        <servlet-name>ViewUserInfor</servlet-name>
+        <url-pattern>/viewUserInfor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewAccount</servlet-name>
+        <url-pattern>/viewAccount</url-pattern>
     </servlet-mapping>
     <!--chien-->
     <servlet-mapping>
@@ -132,6 +193,30 @@
         <servlet-name>ViewMember</servlet-name>
         <url-pattern>/ViewMember</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Certificate</servlet-name>
+        <url-pattern>/Certificate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubmitReport</servlet-name>
+        <url-pattern>/submitReport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Message</servlet-name>
+        <url-pattern>/message</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddCertificate</servlet-name>
+        <url-pattern>/addCertificate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetCertificate</servlet-name>
+        <url-pattern>/getCertificate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewReport</servlet-name>
+        <url-pattern>/viewReport</url-pattern>
+    </servlet-mapping>
     <!--huyen-->
     <servlet-mapping>
         <servlet-name>CheckAttendance</servlet-name>
@@ -140,6 +225,34 @@
     <servlet-mapping>
         <servlet-name>ListInter</servlet-name>
         <url-pattern>/ListInter</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewsManage</servlet-name>
+        <url-pattern>/NewsManage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteNews</servlet-name>
+        <url-pattern>/DeleteNews</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddNews</servlet-name>
+        <url-pattern>/AddNews</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadNews</servlet-name>
+        <url-pattern>/LoadNews</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditNews</servlet-name>
+        <url-pattern>/EditNews</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewNews</servlet-name>
+        <url-pattern>/ViewNews</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchNews</servlet-name>
+        <url-pattern>/SearchNews</url-pattern>
     </servlet-mapping>
     <!--dong-->
     <servlet-mapping>
