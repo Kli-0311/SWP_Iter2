@@ -185,6 +185,20 @@ public class DAO {
         }
         return false;
     }
+    
+     public boolean isEmailExist(String email) {
+        String query = "SELECT 1 FROM Account WHERE username = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            return rs.next(); // Trả về true nếu email tồn tại
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
     }

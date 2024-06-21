@@ -45,7 +45,6 @@ public class UpdateProfile extends HttpServlet {
         Account acc = (Account) session.getAttribute("account");
 
         if (acc == null) {
-            // Handle case where account is not found or session is expired
             response.sendRedirect("error404.jsp");
             return;
         }
@@ -56,14 +55,14 @@ public class UpdateProfile extends HttpServlet {
         String dobStr = request.getParameter("dob");
         String gender = request.getParameter("gender");
         String phone_number = request.getParameter("phone_number");
-        String avatar = acc.getAvatar(); // Get current avatar from account object
+        String avatar = acc.getAvatar(); 
         String specialization = request.getParameter("specialization");
 
         Part filePart = request.getPart("avatarNew");
         String imgFileName = filePart.getSubmittedFileName();
 
         if (imgFileName != null && !imgFileName.isEmpty()) {
-            String uploadPath = "D:/SE1837_Group2_SWP391/SE1837_Group2_SWP391/web/img/" + imgFileName;
+            String uploadPath = "D:/SWP/SWP_Iter2/web/img/" + imgFileName;
             FileOutputStream fos = new FileOutputStream(uploadPath);
             InputStream is = filePart.getInputStream();
             byte[] data = new byte[is.available()];
@@ -82,14 +81,23 @@ public class UpdateProfile extends HttpServlet {
             long age = ageInMillis / (1000L * 60 * 60 * 24 * 365);
             if (age < 18) {
                 request.setAttribute("messErrorDob", "You must be at least 18 years old.");
-                request.getRequestDispatcher("updateProfileFirstTime.jsp").forward(request, response);
+                request.getRequestDispatcher("updateProfile.jsp").forward(request, response);
                 return;
             }
 
             if (!Pattern.matches("\\d{10}", phone_number)) {
                 request.setAttribute("messErrorPhone", "Phone number must have 10 digits.");
-                request.getRequestDispatcher("updateProfileFirstTime.jsp").forward(request, response);
+                request.getRequestDispatcher("updateProfile.jsp").forward(request, response);
                 return;
+            }
+            
+            if (imgFileName != null && !imgFileName.isEmpty()) {
+                String mimeType = getServletContext().getMimeType(imgFileName);
+                if (mimeType == null || !mimeType.startsWith("image")) {
+                    request.setAttribute("messErrorAvatar", "Avatar must be an image file.");
+                    request.getRequestDispatcher("updateProfile.jsp").forward(request, response);
+                    return;
+                }
             }
 
             dao.changeInfoOfUserPage(username, full_name, dob, gender, phone_number, avatar, specialization);
@@ -100,7 +108,6 @@ public class UpdateProfile extends HttpServlet {
         } catch (Exception e) {
         }
 
-        // Forward to the updateProfile.jsp page to display the result
         request.getRequestDispatcher("updateProfile.jsp").forward(request, response);
     }
 

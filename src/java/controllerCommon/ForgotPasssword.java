@@ -4,6 +4,7 @@
  */
 package controllerCommon;
 
+import dal.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -40,31 +41,36 @@ public class ForgotPasssword extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        // Lấy email từ request
         String email = request.getParameter("email");
         int otpValue = 0;
         HttpSession session = request.getSession();
+        DAO dao = new DAO();
 
-        if (email != null) {
-            //gửi mã opt
+        if (email != null && dao.isEmailExist(email)) {
+            // Tạo mã OTP ngẫu nhiên
             Random rand = new Random();
             otpValue = rand.nextInt(1255650);
+            // Cấu hình email và mật khẩu của người gửi
+            String to = email;  // email người nhận
+            final String username = "anhv5203@gmail.com"; // email người gửi
+            final String password = "gadm phve hwwr cogd"; // mật khẩu ứng dụng email người gửi
 
-            String to = email; // change accordingly
-            final String username = "anhv5203@gmail.com";
-            final String password = "gadm phve hwwr cogd";
-            // Get the session object
+            // Thiết lập các thuộc tính cho phiên email
             Properties props = new Properties();
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.host", "smtp.gmail.com");
             props.put("mail.smtp.port", "587");
-
+            
+            // Tạo một session email với thông tin xác thực
             jakarta.mail.Session mysession = jakarta.mail.Session.getInstance(props, new jakarta.mail.Authenticator() {
                 protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
                     return new jakarta.mail.PasswordAuthentication(username, password);
                 }
             });
-            // compose message
+            
+            // Tạo và thông điệp email
             try {
                 Message mess = new MimeMessage(mysession);
                 mess.setFrom(new InternetAddress(email));

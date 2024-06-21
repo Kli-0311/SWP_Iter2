@@ -200,15 +200,17 @@
             <div class="header-logo">
                 <a href="home.jsp"><i class="fa-solid fa-cube"></i> DX-LAB</a>
             </div>
-            <div class="header-nav">
-                <ul class="header-nav-list">
-                    <li class="header-nav-list-item"><a href="home.jsp">Home</a></li>
-                    <li class="header-nav-list-item"><a href="manageRecruiment?service=viewRecruiment">Recruitment</a></li>
-                    <li class="header-nav-list-item"><a href="">Notification</a></li>
-                    <li class="header-nav-list-item"><a href="">News</a></li>
-                </ul>
-            </div>
-            
+            <c:if test="${sessionScope.account == null}">
+                <div class="header-nav">
+                    <ul class="header-nav-list">
+                        <li class="header-nav-list-item"><a href="home.jsp">Home</a></li>
+                        <li class="header-nav-list-item"><a href="manageRecruiment?service=viewRecruiment">Recruitment</a></li>
+                        <li class="header-nav-list-item"><a href="">Notification</a></li>
+                        <li class="header-nav-list-item"><a href="">News</a></li>
+                    </ul>
+                </div>
+            </c:if>
+
             <c:if test="${sessionScope.account != null}">
                 <div class="header-nav">
                     <c:if test="${sessionScope.account.role_id == 1}">

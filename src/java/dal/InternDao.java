@@ -18,6 +18,7 @@ import models.Interns;
 import models.MemberWithPosition;
 import models.Messages;
 import models.Notes;
+import models.Notifications;
 import models.Projects;
 import models.Reports;
 

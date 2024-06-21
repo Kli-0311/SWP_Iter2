@@ -25,7 +25,7 @@
     <div class="container">
         <h1 class="text-center">Edit Certificate</h1>
         <div class="form-container">
-            <form action="addCertificate" method="post">
+            <form action="addCertificate" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="user_id" value="${sessionScope.account.user_id}">
                 <input type="hidden" name="action" value="edit">
                 <input type="hidden" name="cer_id" value="${certificate.certId}">
@@ -41,13 +41,13 @@
                 </div>
                                 
                 <div class="mb-3">
-                    <label for="cer_company" class="form-label">Company:</label>
+                    <label for="cer_company" class="form-label">Project:</label>
                     <input type="text" class="form-control" id="cer_company" name="cer_company" value="${certificate.cerCompany}" required>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="cer_img" class="form-label">Image URL:</label>
-                    <input type="text" class="form-control" id="cer_img" name="cer_img" value="${certificate.cerImg}">
+                    <label for="cer_img" class="form-label">Image:</label>
+                    <input type="file" class="form-control" id="cer_img" name="cer_img">
                 </div>
                 
                 <div class="mb-3">
