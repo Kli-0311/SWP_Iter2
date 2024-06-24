@@ -13,6 +13,7 @@
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include>
+            <!--View Interview Schedule by Intern-->
         <c:if test="${sessionScope.account.role_id == 6}">
             <div class="container">
                 <h1 class="font-weight-semi-bold text-uppercase mb-3 text-center">
@@ -48,6 +49,7 @@
                 </c:if>
             </div>
         </c:if>
+        <!--View list Interview Schedule by Mentor-->
         <c:if test="${sessionScope.account.role_id == 4}">
             <div class="container">
                 <h1 class="font-weight-semi-bold text-uppercase mb-3 text-center">
@@ -90,7 +92,7 @@
                     Interview Schedule Manage
                 </h1>
 
-                <!-- Insert a new notification -->
+                <!-- Insert a new Interview Schedule -->
                 <div class="row">
                     <a class="btn btn-block btn-primary my-3 py-3 text-center" 
                        href="interviewScheduleManage?service=requestInsert"
@@ -98,6 +100,7 @@
                         Create a new Interview Schedule
                     </a>
                 </div>
+                <!--View list Interview Schedule by HR-->
                 <c:if test="${not empty allInterviewSchedule}">
                     <div class="col-lg-12 table-responsive mb-5">
                         <table class="table table-bordered text-center mb-0">
@@ -145,7 +148,7 @@
 
                 <!--//thông bái insert thành công-->
                 <c:if test="${InsertDone ne null}">
-                    <h3 class="font-weight-semi-bold text-uppercase mb-3 text-center">
+                    <h3 class="font-weight-semi-bold mb-3 text-center">
                         ${InsertDone}
                     </h3>
                 </c:if>
@@ -165,7 +168,7 @@
                                 <label for="mentor_id" class="form-label">Mentor ID</label>
                                 <select id="mentor_id" name="mentor_id" class="form-control" required>
                                     <c:forEach items="${listMentor}" var="p">
-                                        <option value="${p.user_id}">${p.username}</option>
+                                        <option value="${p.user_id}">${p.user_id}</option>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -187,7 +190,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="time" class="form-label">Time</label>
-                                <input type="text" class="form-control" id="time" name="time" placeholder="hh:mm AM/PM" required>
+                                <input type="text" class="form-control" id="time" name="time" placeholder="hh:mm:ss" required>
                             </div>
                             <div class="mb-3">
                                 <label for="date" class="form-label">Date</label>

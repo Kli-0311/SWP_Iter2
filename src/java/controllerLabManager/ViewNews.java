@@ -29,9 +29,10 @@ public class ViewNews extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String newsIdStr = request.getParameter("news_id");
+        /*String newsIdStr = request.getParameter("news_id");
         LabManagerDAO newsDAO = new LabManagerDAO();
         List<News> last = newsDAO.getLastNews();
+        
 
         if (newsIdStr == null) {
             List<News> newsList = newsDAO.getAllNews();
@@ -45,8 +46,41 @@ public class ViewNews extends HttpServlet {
             request.setAttribute("newsLastView", last);
             request.getRequestDispatcher("newsDetails.jsp").forward(request, response);
         }
-    
-    } 
+    }*/
+        String newsIdStr = request.getParameter("news_id");
+        LabManagerDAO newsDAO = new LabManagerDAO();
+        List<News> last = newsDAO.getLastNews();
+
+        if (newsIdStr == null) {
+            
+            String indexPage = request.getParameter("index");
+            if (indexPage == null) {
+                indexPage = "1";
+            }
+            int index = Integer.parseInt(indexPage);
+
+            // tong so news , và số trang cần 
+            int totalNews = newsDAO.getTotalNews();
+            int endPage = totalNews / 5;
+            if (totalNews % 5 != 0) {
+                endPage++;
+            }
+
+            List<News> list = newsDAO.pagingNews(index);
+            request.setAttribute("ListA", list);
+            request.setAttribute("endP", endPage);
+            request.setAttribute("tag", index);
+            request.setAttribute("newsLastView", last);
+            request.getRequestDispatcher("news.jsp").forward(request, response);
+        } else {
+            // Show details for a specific news item
+            int newsId = Integer.parseInt(newsIdStr);
+            News news = newsDAO.getNewsBynewsId(newsId);
+            request.setAttribute("newsDetailsView", news);
+            request.setAttribute("newsLastView", last);
+            request.getRequestDispatcher("newsDetails.jsp").forward(request, response);
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 

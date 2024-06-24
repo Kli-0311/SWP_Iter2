@@ -62,14 +62,14 @@ public class ForgotPasssword extends HttpServlet {
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.host", "smtp.gmail.com");
             props.put("mail.smtp.port", "587");
-            
+
             // Tạo một session email với thông tin xác thực
             jakarta.mail.Session mysession = jakarta.mail.Session.getInstance(props, new jakarta.mail.Authenticator() {
                 protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
                     return new jakarta.mail.PasswordAuthentication(username, password);
                 }
             });
-            
+
             // Tạo và thông điệp email
             try {
                 Message mess = new MimeMessage(mysession);
@@ -86,12 +86,14 @@ public class ForgotPasssword extends HttpServlet {
             session.setAttribute("otp", otpValue);
             session.setAttribute("email", email);
             request.getRequestDispatcher("enterOTP.jsp").forward(request, response);
-
+        } else {
+            // Email không tồn tại trong cơ sở dữ liệu
+            request.setAttribute("message", "Email does not exist");
+            request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
         }
-
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

@@ -3,25 +3,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controllerLabManager;
+package controllerMentor;
 
-import dal.LabManagerDAO;
+import dal.MentorDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.util.List;
 import models.Account;
-import models.News;
+import models.Project;
+import models.ReportsMentor;
 
 /**
  *
  * @author ADM
- */
-public class NewsManage extends HttpServlet {
+ 
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -30,18 +30,23 @@ public class NewsManage extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+public class ViewReportsMentor  extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-       HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
-        String userId = account.getUser_id();
-        LabManagerDAO newsDAO = new LabManagerDAO();
-        List<News> newsList = newsDAO.getAllNewsByuserID(userId);
-        request.setAttribute("newsList", newsList);
-        request.getRequestDispatcher("CreateNews.jsp").forward(request, response);
-    }
-       
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ViewReportsMentor</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ViewReportsMentor at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
@@ -54,16 +59,34 @@ public class NewsManage extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
-    } 
+       HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        String userId = account.getUser_id();
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+        MentorDAO dao = new MentorDAO();
+        // lấy list projectname 
+        List<Project> projects = dao.getProjectsByUserId(userId);
+        request.setAttribute("projects", projects);
+         
+        String selectedProject = request.getParameter("selectedProject");
+        request.setAttribute("selectedProject", selectedProject);
+
+        List<ReportsMentor> reportsList;
+        if (selectedProject != null && !selectedProject.isEmpty() && !selectedProject.equals("all")) {
+            reportsList = dao.getReportsByProjectName(selectedProject);
+        }else{
+             
+             reportsList = dao.getAllReports();
+        }
+        request.setAttribute("reportsList", reportsList);
+
+        request.getRequestDispatcher("CheckReport.jsp").forward(request, response);
+    }
+
+    
+
+
+     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {

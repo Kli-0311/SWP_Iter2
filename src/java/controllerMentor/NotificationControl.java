@@ -82,7 +82,7 @@ public class NotificationControl extends HttpServlet {
         if (service.equals("requestInsert")) {
             List<Projects> listProject = (new MentorDAO()).getALLProjectByMentor(user_id);
             List<Positions> listPosition = (new MentorDAO()).getAllPositionByMentor(user_id);
-            request.setAttribute("listPosition",listPosition);
+            request.setAttribute("listPosition", listPosition);
             request.setAttribute("listProject", listProject);
             request.setAttribute("createNotification", "createNotification");
             request.getRequestDispatcher("Notification.jsp").forward(request, response);
@@ -100,10 +100,17 @@ public class NotificationControl extends HttpServlet {
             String link = request.getParameter("link");
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Time time = Time.valueOf(timeStr);
+            String timePattern = "^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$";
+            if (!timeStr.matches(timePattern)) {
+                List<Notifications> list = (new MentorDAO()).getAllNotificationByMentor(user_id);
+                request.setAttribute("allNotification", list);
+                request.setAttribute("InsertDone", "Create failed: Time format is incorrect! Please use HH:mm:ss format.");
+                request.getRequestDispatcher("Notification.jsp").forward(request, response);
+                return;
+            }
             try {
                 Date dateStart = dateFormat.parse(dateStr);
-
+                Time time = Time.valueOf(timeStr);
                 MentorDAO dao = new MentorDAO();
                 dao.addNotification(sendId, projectCode, positionCode, dateStart, time, message, title, room, link);
                 request.setAttribute("InsertDone", "Insert Successful!");

@@ -216,6 +216,48 @@ return list;
     }
     return list;
 }
+    // hàm đếm xem bảng new có bao nhiêu 
+    public int getTotalNews() {
+        String query = "SELECT COUNT(*) FROM News;";
+        
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);// trong sql nó chỉ trả về 1 kq
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+        return 0 ;
+    }
+    // indext là cái số trang mik nhấn vào 
+    public List<News> pagingNews(int index) {
+        List<News> list = new ArrayList<>();
+        String query = "SELECT *from News \n"
+                + "ORDER BY news_id \n"
+                + "OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY ; ";
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, (index-1)*5);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(new News(
+                        rs.getInt(1), // news_id
+                        rs.getDate(2), // published_date
+                        rs.getString(3), // image_url
+                        rs.getString(4), // title
+                        rs.getString(5), // contenT
+                        rs.getString(6) // user_id 
+                ));
+            }
+        }catch(Exception e){
+            
+        }
+        return list;
+    }
     
 
 
@@ -241,7 +283,7 @@ return list;
         
         System.out.println("News inserted successfully.");
     }*/
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
     // Create an instance of the NewsDAO to access the database
         LabManagerDAO newsDAO = new LabManagerDAO();
 
@@ -262,10 +304,26 @@ return list;
         }
     } else {
         System.out.println("No news found."); // Handle case where no news is retrieved
+    }*/
+    /*public static void main(String[] args) {
+         LabManagerDAO dao  = new LabManagerDAO();
+        int news  = dao.getTotalNews();
+        System.out.println(news);
     }
+}*/
+    public static void main(String[] args) {
+        LabManagerDAO dao = new LabManagerDAO();
+        List<News> list = dao.pagingNews(1);
+        for(News o :list ){
+            System.out.print(o);
+        }
+    }
+        
 }
 
-}
+
+
+
 
 
 

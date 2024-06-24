@@ -107,7 +107,7 @@ Author     : admin
 
                 <!--thong bao create thanh cong or khong-->
                 <c:if test="${InsertDone ne null}">
-                    <h3 class="font-weight-semi-bold text-uppercase mb-3 text-center">
+                    <h3 class="font-weight-semi-bold mb-3 text-center">
                         ${InsertDone}
                     </h3>
                 </c:if>

@@ -13,15 +13,13 @@
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include>
-        
-
         <c:if test="${sessionScope.account.role_id == 4}">
             <div class="container">
                 <h1 class="font-weight-semi-bold text-uppercase mb-3 text-center">
                     Notifications Manage
                 </h1>
 
-                <!-- Insert a new notification -->
+                <!-- Create a new notification -->
                 <div class="row">
                     <a class="btn btn-block btn-primary my-3 py-3 text-center" 
                        href="notification?service=requestInsert"
@@ -29,6 +27,7 @@
                         Create a new Notifications
                     </a>
                 </div>
+                <!--view list Notification-->
                 <c:if test="${not empty allNotification}">
                     <div class="col-lg-12 table-responsive mb-5">
                         <table class="table table-bordered text-center mb-0">
@@ -80,11 +79,11 @@
 
                 <!--//thông bái insert thành công-->
                 <c:if test="${InsertDone ne null}">
-                    <h3 class="font-weight-semi-bold text-uppercase mb-3 text-center">
+                    <h3 class="font-weight-semi-bold  mb-3 text-center">
                         ${InsertDone}
                     </h3>
                 </c:if>
-                <!--//Form insert Notification-->
+                <!--//Form create Notification-->
                 <c:if test="${createNotification ne null}">
                     <div class="container mt-8">
                         <h1 class="font-weight-semi-bold text-uppercase mb-3 text-center">
