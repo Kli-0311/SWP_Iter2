@@ -10,12 +10,16 @@
         <servlet-class>controllerCommon.LoginControl</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>SignupControl</servlet-name>
-        <servlet-class>controllerCandidate.SignupControl</servlet-class>
+        <servlet-name>UpdateProfileFirstTime</servlet-name>
+        <servlet-class>controllerCandidate.UpdateProfileFirstTime</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Attendance</servlet-name>
         <servlet-class>controllerMentor.Attendance</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateProfile</servlet-name>
+        <servlet-class>controllerCommon.UpdateProfile</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChangeInfoOfUser</servlet-name>
@@ -130,6 +134,54 @@
         <servlet-name>CandidateManage</servlet-name>
         <servlet-class>controllerCandidate.CandidateManage</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DetailProject</servlet-name>
+        <servlet-class>controllerHR.DetailProject</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateRecruiment</servlet-name>
+        <servlet-class>controllerHR.CreateRecruiment</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewRecruiment</servlet-name>
+        <servlet-class>controllerHR.ViewRecruiment</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteControl</servlet-name>
+        <servlet-class>controllerHR.DeleteProject</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NotificationManage</servlet-name>
+        <servlet-class>controllerHR.NotificationManage</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewInterviewSchedule</servlet-name>
+        <servlet-class>controllerCandidate.ViewInterviewSchedule</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InterviewScheduleManage</servlet-name>
+        <servlet-class>controllerHR.InterviewScheduleManage</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NotificationControl</servlet-name>
+        <servlet-class>controllerMentor.NotificationControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewInterviewScheduleByMentor</servlet-name>
+        <servlet-class>controllerMentor.ViewInterviewScheduleByMentor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewNotificationByIntern</servlet-name>
+        <servlet-class>controllerIntern.ViewNotificationByIntern</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteNotification</servlet-name>
+        <servlet-class>controllerHR.DeleteNotification</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateRecruiment</servlet-name>
+        <servlet-class>controllerHR.CreateRecruiment</servlet-class>
+    </servlet>
     <!--vietanh-->
     <servlet>
         <servlet-name>ForgotPasssword</servlet-name>
@@ -148,8 +200,12 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>SignupControl</servlet-name>
-        <url-pattern>/signup</url-pattern>
+        <servlet-name>UpdateProfileFirstTime</servlet-name>
+        <url-pattern>/updateFirst</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateProfile</servlet-name>
+        <url-pattern>/updateProfile</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ChangeInfoOfUser</servlet-name>
@@ -262,6 +318,54 @@
     <servlet-mapping>
         <servlet-name>CandidateManage</servlet-name>
         <url-pattern>/CandidateManage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DetailProject</servlet-name>
+        <url-pattern>/detailProject</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateRecruiment</servlet-name>
+        <url-pattern>/createProject</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewRecruiment</servlet-name>
+        <url-pattern>/viewRecruiment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteControl</servlet-name>
+        <url-pattern>/deleteControl</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NotificationManage</servlet-name>
+        <url-pattern>/notificationManage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewInterviewSchedule</servlet-name>
+        <url-pattern>/viewInterviewSchedule</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InterviewScheduleManage</servlet-name>
+        <url-pattern>/interviewScheduleManage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NotificationControl</servlet-name>
+        <url-pattern>/notification</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewInterviewScheduleByMentor</servlet-name>
+        <url-pattern>/viewInterviewScheduleByMentor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewNotificationByIntern</servlet-name>
+        <url-pattern>/viewNotificationByIntern</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteNotification</servlet-name>
+        <url-pattern>/deleteNotification</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateRecruiment</servlet-name>
+        <url-pattern>/createRecruiment</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Attendance</servlet-name>

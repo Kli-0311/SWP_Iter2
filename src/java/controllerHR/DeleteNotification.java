@@ -3,25 +3,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controllerLabManager;
+package controllerHR;
 
-import dal.LabManagerDAO;
+import dal.HRDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import java.util.List;
 import models.Account;
-import models.News;
 
 /**
  *
- * @author ADM
+ * @author admin
  */
-public class NewsManage extends HttpServlet {
+public class DeleteNotification extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -33,15 +31,20 @@ public class NewsManage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-       HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
-        String userId = account.getUser_id();
-        LabManagerDAO newsDAO = new LabManagerDAO();
-        List<News> newsList = newsDAO.getAllNewsByuserID(userId);
-        request.setAttribute("newsList", newsList);
-        request.getRequestDispatcher("CreateNews.jsp").forward(request, response);
-    }
-       
+        String service = request.getParameter("service");
+        request.setAttribute("deleteControl", "Yes");
+        HttpSession session = request.getSession();
+        Object o = session.getAttribute("account");
+        Account acc = (Account) o;
+        if (acc == null || acc.getRole_id() == 1 || acc.getRole_id() == 2 ||acc.getRole_id() == 5 || acc.getRole_id() == 6) {
+            response.sendRedirect("error404.jsp");
+        }else if(service.equals("deleteNotification")){
+            int notificationId = Integer.parseInt(request.getParameter("notificationId"));
+            HRDAO ndao = new HRDAO();
+            ndao.deleteNotificationById(notificationId);
+            response.sendRedirect("interviewScheduleManage");
+        }
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 

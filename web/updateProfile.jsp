@@ -114,6 +114,9 @@
                     <option value="NULL" ${sessionScope.account.specialization == 'NULL' ? 'selected' : ''}>NULL</option>
                 </select>
                 <button type="submit" class="registerbtn">Done</button>
+                <p>${messErrorPhone}</p>
+                <p>${messErrorDob}</p>
+                <p>${messErrorAvatar}</p>
                 <strong>${mess}</strong>
             </form>
         </div>

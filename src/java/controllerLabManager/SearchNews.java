@@ -75,9 +75,10 @@ public class SearchNews extends HttpServlet {
         List<News> list = dao.SearchBytitle(search);
         List<News> last = dao.getLastNews();
         
-        request.setAttribute("newsListView", list);
+        request.setAttribute("ListA", list);
         request.setAttribute("newsLastView", last);
-        request.setAttribute("search",search);
+        request.setAttribute("searchS",search);
+        request.setAttribute("isSearchResult", true); 
         request.getRequestDispatcher("news.jsp").forward(request, response);
         
         

@@ -98,6 +98,49 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('editForm');
 
+        form.addEventListener('submit', function(event) {
+            var publishedDate = form.elements['publishedDate'].value;
+            var title = form.elements['title'].value;
+            var content = form.elements['content'].value;
+            
+            var errorMessages = [];
+            
+            // Kiểm tra nếu không có publishedDate
+            if (!publishedDate) {
+                errorMessages.push("Published Date is required.");
+            } else {
+                // Tạo đối tượng Date từ chuỗi publishedDate
+                var selectedDate = new Date(publishedDate);
+                var today = new Date(); // Ngày hôm nay
+
+                // So sánh ngày được chọn và ngày hôm nay
+                if (selectedDate.toISOString().split('T')[0] !== today.toISOString().split('T')[0]) // Chuyển selectedDate thành chuỗi ở định dạng ISO (ví dụ: "2024-06-21T00:00:00.000Z"), sau đó tách chuỗi này bằng ký tự 'T' và lấy phần đầu tiên (ngày) (ví dụ: "2024-06-21").
+                {
+                    errorMessages.push("Published Date must be today.");
+                }
+            }
+
+            if (title.length < 25 || title.length > 100) {
+                errorMessages.push("Title must be between 25 and 100 characters.");
+            }
+
+            if (content.length < 25 || content.length > 10000) {
+                errorMessages.push("Content must be between 25 and 10000 characters.");
+            }
+
+            if (errorMessages.length > 0) {
+                event.preventDefault(); // Prevent form submission
+                alert(errorMessages.join("\n")); // Hiển thị thông báo lỗi
+            } else {
+                // Nếu không có lỗi, hiển thị modal success
+                
+            }
+        });
+    });
+</script>
 </body>
 </html>

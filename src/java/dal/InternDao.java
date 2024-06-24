@@ -18,6 +18,7 @@ import models.Interns;
 import models.MemberWithPosition;
 import models.Messages;
 import models.Notes;
+import models.Notifications;
 import models.Projects;
 import models.Reports;
 
@@ -423,7 +424,37 @@ public class InternDao {
         }
         return 0;
     }
+    
+        public List<Notifications> getAllNotificationByIntern(String userId) {
+        List<Notifications> list = new ArrayList<>();
+        String query = "SELECT *\n"
+                + "from Notifications n\n"
+                + "join Interns i on i.mentor_id = n.sender_id\n"
+                + "where i.user_id LIKE ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Notifications(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getTime(8),
+                        rs.getDate(9),
+                        rs.getString(10),
+                        rs.getString(11)));
+            }
+        } catch (Exception e) {
 
+        }
+        return list;
+
+    }
 
     public static void main(String[] args) {
 

@@ -1,11 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News</title>
+    <link href="style.css" rel="stylesheet" type="text/css" >
     <style>
         /* Reset CSS */
         body, h1, h2, h3, p, ul, ol, li, img {
@@ -59,7 +61,7 @@
             align-items: flex-start;
         }
         .news-item:hover {
-            transform: scale(1.02);
+            transform: scale(1.02);<%-- tạo hiệu ứng --%>
         }
         .news-item img {
             max-width: 150px;
@@ -129,6 +131,39 @@
             padding-top: 8px;
             
         }
+         .pagination a {
+            margin: 0 5px;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+        }
+        .pagination a.active {
+            font-weight: bold;
+            background-color: #eee;
+        }
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            font-size: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .back-button::before {
+            content: '←';
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -137,20 +172,26 @@
         <div class="container">
             <div class="main-content">
                 <h2> News</h2>
-            <form action="SearchNews" method="post" class="form-inline my-2 my-lg-0">
+            <c:if test="${isSearchResult != null && isSearchResult}">
+                <div>
+                    <a href="ViewNews" class="back-button"></a>
+                </div>
+            </c:if>
+            <form action="SearchNews" method="post" class="form-inline my-2 my-lg-0" >
                 <div class="input-group input-group-sm">
-                    <input  value="${search}" name="search" type="text" class="form-control"
+                    <input  value="${searchS}" name="search" type="text" class="form-control"
                            aria-label="Small" aria-describedby="inputGroup-sizing -sm" placeholder="Search News ">
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-secondary btn-number">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
-                </div>
+                
+            </div>
                 
             </form>
-            <c:forEach var="news" items="${newsListView}">
-                <div class="news-item">
+            <c:forEach var="news" items="${ListA}"  >
+                <div class="news-item" id="news-item-${news.newsId}">
                     <img src="${news.imageUrl}" alt="News Image">
                     <div>
                         <a href="ViewNews?news_id=${news.newsId}">
@@ -163,6 +204,19 @@
                     </div>
                 </div>
             </c:forEach>
+              <!-- Pagination Controls -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <c:forEach var="i" begin="1" end="${endP}">
+                        <li class="page-item ${tag == i ? 'active' : ''}">
+                            <a class="page-link" href="ViewNews?index=${i}">${i}</a>
+                        </li>
+                    </c:forEach>
+                </ul>
+            </nav>
+              
+            
+                             
         </div>
 
         <div class="sidebar">
@@ -170,21 +224,24 @@
             <c:if test="${not empty newsLastView}">
                 <c:forEach items="${newsLastView}" var="news">
                     <div class="news-item">
-                    <img src="${news.imageUrl}" alt="Related News Image">
-                    <div>
-                        <a href="ViewNews?news_id=${news.newsId}">
-                            <h3>${news.title}</h3>
-                            <p>Published Date: ${news.publishedDate}</p>
-                        </a>
-                        <div class="author">
-                            Author: ${news.userId}
+                        <img src="${news.imageUrl}" alt="Related News Image">
+                        <div>
+                            <a href="ViewNews?news_id=${news.newsId}">
+                                <h3>${news.title}</h3>
+                                <p>Published Date: ${news.publishedDate}</p>
+                            </a>
+                            <div class="author">
+                                Author: ${news.userId}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </c:forEach>
-        </c:if>
+                </c:forEach>
+            </c:if>
+
+        </div>
+                           
     </div>
-    </div>
+                   
 
     <jsp:include page="footer.jsp"></jsp:include>
 </body>
