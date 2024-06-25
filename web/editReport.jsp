@@ -31,7 +31,7 @@
                     
                     <div class="mb-3">
                         <label for="week" class="form-label">Week</label>
-                        <input type="number" class="form-control" id="week" name="week" value="${report.week}" readonly>
+                        <input type="number" class="form-control" id="week" name="week" value="${report.week}" disabled>
                     </div>
                     <div class="mb-3">
                         <label for="report" class="form-label">Report</label>

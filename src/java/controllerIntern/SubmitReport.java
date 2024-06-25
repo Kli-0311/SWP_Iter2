@@ -42,18 +42,10 @@ public class SubmitReport extends HttpServlet {
             }
 
             int week = Integer.parseInt(weekStr);
-           
-            
-
             int intern_id = dao.getInternIdByUserId(acc.getUser_id());
             String mentorId = dao.getMentoridbyProjectcode(projectCode);
-
-            if (request.getParameter("action") != null && request.getParameter("action").equalsIgnoreCase("edit")) {
-                int reportId = Integer.parseInt(reportIds);
-                dao.editReport(reportId, report, reportLink, mentorId, projectCode);
-            } else {
-                dao.createReport(intern_id, week, report, reportLink, mentorId, projectCode);
-            }
+            
+                dao.createReport(intern_id, week, report, reportLink, mentorId, projectCode);            
 
             request.getRequestDispatcher("viewReport").forward(request, response);
         } catch (NumberFormatException e) {

@@ -41,7 +41,7 @@
 
                 <div class="mb-3">
                     <label for="project_code" class="form-label">Project Code:</label>
-                    <input type="text" class="form-control" id="project_code" name="project_code" value="${projectCode}" required>
+                    <input type="text" class="form-control" id="project_code" name="project_code" value="${projectCode}" disabled>
                   </div>
 
                 <div class="mb-3">
