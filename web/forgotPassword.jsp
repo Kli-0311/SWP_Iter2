@@ -65,16 +65,17 @@
             .forgot-password-container .links a:hover {
                 color: rgb(80,80,130);
             }
-            
+
         </style>
     </head>
     <body>
         <div class="forgot-password-container">
             <form action="forgotPasssword" method="post">
                 <h1>Forgot Password</h1>
-                <p>${mess}</p>
                 <input type="text" name="email" placeholder="Email" required style="background-color: white" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                 <input type="submit" value="Reset Password">
+                <p>${message}</p>
+
             </form>
             <div class="links">
                 <a href="login">Back to Login</a>

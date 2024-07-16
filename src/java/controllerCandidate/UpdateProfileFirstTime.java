@@ -58,7 +58,7 @@ public class UpdateProfileFirstTime extends HttpServlet {
         Part file = request.getPart("avatar");
         String imgFileName = file.getSubmittedFileName();
         
-        String uploadPath = "D:/SE1837_Group2_SWP391/SE1837_Group2_SWP391/web/img/" + imgFileName;
+        String uploadPath = "D:/SWP/SWP_Iter2/web/img/" + imgFileName;
         FileOutputStream fos = new FileOutputStream(uploadPath);
         InputStream is = file.getInputStream();
         
@@ -67,9 +67,9 @@ public class UpdateProfileFirstTime extends HttpServlet {
         fos.write(data);
         fos.close();
         
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            Date dob = dateFormat.parse(dobStr);
+             Date dob = dateFormat.parse(dobStr);
 
             if (!password.equals(repeatPassword)) {
                 request.setAttribute("messErrorPass", "Password and Re-Password must be the same.");

@@ -4,6 +4,7 @@
  */
 package controllerCommon;
 
+import dal.CandidateDAO;
 import dal.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import models.Account;
+import models.Applications;
 
 /**
  *
@@ -43,8 +45,13 @@ public class LoginControl extends HttpServlet {
         } else {
             HttpSession session = request.getSession();
             String role_name = dao.getRoleName(acc.getRole_id());
+            //lấy projectcode
+            CandidateDAO cdao = new CandidateDAO();
+            Applications projectCode = cdao.getProjectCodeByApplicantId(acc.getUser_id());
+            session.setAttribute("projectCode", projectCode);
             session.setAttribute("account", acc);
             session.setAttribute("role_name", role_name);
+            
              if (isFirstLogin(acc)) {
                 response.sendRedirect("updateProfileFirstTime.jsp");
             } else {
@@ -54,7 +61,7 @@ public class LoginControl extends HttpServlet {
     }
     
     private boolean isFirstLogin(Account acc) {
-        return acc.getFull_name() == null || acc.getDob() == null || acc.getPhone_number() == null;
+        return acc.getFull_name() == null ;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

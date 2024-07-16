@@ -220,7 +220,8 @@
                 var today = new Date(); // Ngày hôm nay
 
                 // So sánh ngày được chọn và ngày hôm nay
-                if (selectedDate.toISOString().split('T')[0] !== today.toISOString().split('T')[0]) {
+                if (selectedDate.toISOString().split('T')[0] !== today.toISOString().split('T')[0]) // Chuyển selectedDate thành chuỗi ở định dạng ISO (ví dụ: "2024-06-21T00:00:00.000Z"), sau đó tách chuỗi này bằng ký tự 'T' và lấy phần đầu tiên (ngày) (ví dụ: "2024-06-21").
+                {
                     errorMessages.push("Published Date must be today.");
                 }
             }

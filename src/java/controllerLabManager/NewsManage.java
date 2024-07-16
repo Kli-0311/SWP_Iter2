@@ -33,16 +33,15 @@ public class NewsManage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
+       HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         String userId = account.getUser_id();
         LabManagerDAO newsDAO = new LabManagerDAO();
         List<News> newsList = newsDAO.getAllNewsByuserID(userId);
         request.setAttribute("newsList", newsList);
         request.getRequestDispatcher("CreateNews.jsp").forward(request, response);
-            
-}
-    
+    }
+       
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
