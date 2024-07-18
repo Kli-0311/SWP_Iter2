@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controllerMentor;
+package controllerCandidate;
 
+import dal.CandidateDAO;
 import dal.EvaluationDAO;
 import dal.MentorDAO;
 import java.io.IOException;
@@ -14,17 +15,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import models.Account;
-import models.Applications;
-import models.CandidateApply;
-import models.GradeForInterns;
-import models.Interns;
+import models.ProjectPass;
 import models.ProjectWithPositions;
+import models.Projects;
 
 /**
  *
  * @author admin
  */
-public class ProjectManageByMentor extends HttpServlet {
+public class ViewProjectPass extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,36 +38,45 @@ public class ProjectManageByMentor extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String service = request.getParameter("service");
-        request.setAttribute("projectManageByMentor", "Yes");
-        MentorDAO dao = new MentorDAO();
+        request.setAttribute("viewProjectPass", "Yes");
+        Account acc = (Account) request.getSession().getAttribute("account");
+        String user_id = acc.getUser_id();
+        CandidateDAO cdao = new CandidateDAO();
+        EvaluationDAO edao = new EvaluationDAO();
+        MentorDAO mdao = new MentorDAO();
         if (service == null) {
             service = "listAll";
         }
         if (service.equals("listAll")) {
+            List<ProjectPass> list = cdao.getAllProjectPass(user_id);
+            request.setAttribute("list", list);
+            request.getRequestDispatcher("ViewProjectPass.jsp").forward(request, response);
+        }
+        if (service.equals("detail")) {
             String projectCode = request.getParameter("projectCode");
-            ProjectWithPositions projects = dao.getProjectByProjectCode(projectCode);
-            List<CandidateApply> listCandidate = dao.getAllCandidateByProjectCode1(projectCode);
-            List<Account> listIntern = dao.getAllInternByProjectCode(projectCode);
+            String positionCode = request.getParameter("positionCode");
+            String mentorId = request.getParameter("mentorId");
+            ProjectWithPositions projects = mdao.getProjectByProjectCode(projectCode);
+
             request.setAttribute("detailProject", projects);
-            request.setAttribute("listCandidate", listCandidate);
-            request.setAttribute("listIntern", listIntern);
-            request.getRequestDispatcher("ProjectManageByMentor.jsp").forward(request, response);
+            request.setAttribute("positionCode", positionCode);
+            request.getRequestDispatcher("ViewProjectPass.jsp").forward(request, response);
         }
-        if (service.equals("viewGrade")) {
+        if (service.equals("choose")) {
+            //insert Interns
             String projectCode = request.getParameter("projectCode");
-            String type = request.getParameter("selectedProject");
-
-            List<GradeForInterns> grade;
-            if (type == null || type.equals("all")) {
-                grade = (new EvaluationDAO()).getAllGradeForInternByProjectCode(projectCode);
-            } else {
-                grade = (new EvaluationDAO()).getAllGradeForInternByProjectCodeAndType(projectCode, type);
-            }
-
-            request.setAttribute("gradeForIntern", grade);
-            request.setAttribute("selectedProject", type); // Save the selected project type to pass to the JSP
-            request.getRequestDispatcher("ViewGradeInternByMentor.jsp").forward(request, response);
+            String positionCode = request.getParameter("positionCode");
+            String mentorId = request.getParameter("mentorId");
+            ProjectWithPositions projects = mdao.getProjectByProjectCode(projectCode);
+            edao.deleteAllCandidateApplyByUserId(user_id);
+            edao.insertIntern(user_id, projectCode, mentorId, positionCode);
+            //chuyển role thành intern
+            int role = Integer.parseInt(request.getParameter("role"));
+            edao.updateRole(role, user_id);
+            request.setAttribute("done", "Chuc mung ban da tro thanh Intern cua Project cos ProjectCode = " + projectCode);
+            request.getRequestDispatcher("Recruiment.jsp").forward(request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

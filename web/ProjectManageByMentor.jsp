@@ -35,7 +35,10 @@
                     </div>
                     <div class="col-md-3">
                         <div class="product-listing">
-                            <a href="notificationControl?projectCode=${detailProject.projectCode}">Notification</a>
+                            <a class="btn btn-primary" href="notificationControl?projectCode=${detailProject.projectCode}">Notification</a>
+                        </div>
+                        <div class="product-listing">
+                            <a class="btn btn-success" href="projectManageByMentor?service=viewGrade&projectCode=${detailProject.projectCode}">View Grade</a>
                         </div>
                     </div>     
                 </div>
@@ -58,6 +61,63 @@
                             </c:forEach>
                         </div>
                     </c:if>
+                </c:if>
+                <c:if test="${not empty listCandidate}">
+                    <h3>List Candidate </h3>
+                    <div class="col-lg-12 table-responsive mb-5">
+                        <table class="table table-bordered text-center mb-0">
+                            <thead class="bg-secondary text-dark">
+                                <tr>
+                                    <th>Roll Number</th>
+                                    <th>Email</th>
+                                    <th>Full Name</th>
+                                    <th>Gender</th>
+                                    <th>Date Of Birth</th>
+                                    <th>Phone Number</th>
+                                    <th>Major</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="align-middle">
+                                <c:forEach items="${listCandidate}" var="view">
+                                    <tr>
+                                        <td class="align-middle">${view.userId}</td>
+                                        <td class="align-middle">${view.username}</td>
+                                        <td class="align-middle">${view.full_name}</td>
+                                        <td class="align-middle">${view.gender}</td>
+                                        <td class="align-middle">${view.dob}</td>
+                                        <td class="align-middle">${view.phone_number}</td>
+                                        <td class="align-middle">${view.specialization}</td>
+                                        <td class="align-middle">
+                                            <form action="passFaildManage" method="get">
+                                                <input type="hidden" name="service" value="fail"/>
+                                                <input type="hidden" name="userId" value="${view.userId}"/>
+                                                <input type="hidden" name="email" value="${view.username}"/>
+                                                <input type="hidden" name="fullname" value="${view.full_name}"/>
+                                                <input type="hidden" name="projectCode" value="${view.projectCode}"/>
+                                                <input class="btn btn-danger w-100" type="submit" value="Fail"/>
+                                            </form>
+                                            <form action="passFaildManage" method="get">
+                                                <input type="hidden" name="service" value="pass"/>
+                                                <input type="hidden" name="userId" value="${view.userId}"/>
+                                                <input type="hidden" name="fullname" value="${view.full_name}"/>
+                                                <input type="hidden" name="email" value="${view.username}"/>
+                                                <input type="hidden" name="projectCode" value="${view.projectCode}"/>
+                                                <input type="hidden" name="status" value="Done"/>
+
+                                                <input class="btn btn-success w-100" type="submit" value="Pass"/>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                    <script>
+                        function confirmDelete(userId) {
+                            return confirm("Are you sure you want to fail this User (User ID = " + userId + ") ?");
+                        }
+                    </script>
                 </c:if>
                 <c:if test="${not empty listIntern}">
                     <h3>List Intern </h3>

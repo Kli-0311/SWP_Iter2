@@ -329,4 +329,77 @@ public class HRDAO extends DBContext {
         }
         return list;
     }
+    public boolean isInterviewScheduleExists(String projectCode) {
+        String query = "SELECT COUNT(*) FROM InterviewSchedule \n"
+                + "WHERE project_code LIKE ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, projectCode);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    //update interview schedule
+    public InterviewSchedule getInterviewScheduleById(int interviewScheduleId) {
+        String query = "SELECT *\n"
+                + "FROM InterviewSchedule\n"
+                + "WHERE interviewschedule_id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, interviewScheduleId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new InterviewSchedule(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getTime(7),
+                        rs.getDate(8),
+                        rs.getString(9));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int updateInterviewSchedule(int interviewScheduleId, String send_id, String mentor_id, String project_code, Date date_start, Time time, String message, String title, String room) {
+        String query = "UPDATE [dbo].[InterviewSchedule]\n"
+                + "   SET [sender_id] = ?\n"
+                + "      ,[mentor_id] = ?\n"
+                + "      ,[project_code] = ?\n"
+                + "      ,[message] = ?\n"
+                + "      ,[title] =?\n"
+                + "      ,[Time] = ?\n"
+                + "      ,[date_start] = ?\n"
+                + "      ,[room] = ?\n"
+                + " WHERE [interviewschedule_id] = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, send_id);
+            ps.setString(2, mentor_id);
+            ps.setString(3, project_code);
+            ps.setString(4, message);
+            ps.setString(5, title);
+            ps.setTime(6, time);
+            ps.setDate(7, new java.sql.Date(date_start.getTime()));
+            ps.setString(8, room);
+            ps.setInt(9, interviewScheduleId);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

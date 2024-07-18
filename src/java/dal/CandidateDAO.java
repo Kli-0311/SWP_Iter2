@@ -13,6 +13,7 @@ import models.Applications;
 import models.CandidateApply;
 import models.InterviewSchedule;
 import models.Notifications;
+import models.ProjectPass;
 
 /**
  *
@@ -95,10 +96,11 @@ public class CandidateDAO extends DBContext {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getDate(6),
-                        rs.getString(7),
+                        rs.getString(6),
+                        rs.getDate(7),
                         rs.getString(8),
-                        rs.getString(9)));
+                        rs.getString(9),
+                        rs.getString(10)));
             }
 
         } catch (Exception e) {
@@ -129,6 +131,32 @@ public class CandidateDAO extends DBContext {
                         rs.getTime(7),
                         rs.getDate(8),
                         rs.getString(9)));
+            }
+        } catch (Exception e) {
+
+        }
+        return list;
+    }
+    public List<ProjectPass> getAllProjectPass(String userId) {
+        List<ProjectPass> list = new ArrayList<>();
+        String query = "Select p.project_code, p.project_name, p.mentor_id, p.project_details, p.project_img , p.project_startday, p.project_endday, a.position_code\n"
+                + "from Projects p\n"
+                + "join Applications a on p.project_code = a.project_code\n"
+                + "where a.status = 'Done' and a.applicant_id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new ProjectPass(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getDate(6),
+                        rs.getDate(7),
+                        rs.getString(8)));
             }
         } catch (Exception e) {
 
