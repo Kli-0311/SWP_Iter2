@@ -13,6 +13,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 import models.Account;
 import models.Applications;
 
@@ -45,23 +50,51 @@ public class LoginControl extends HttpServlet {
         } else {
             HttpSession session = request.getSession();
             String role_name = dao.getRoleName(acc.getRole_id());
-            //lấy projectcode
-            CandidateDAO cdao = new CandidateDAO();
-            Applications projectCode = cdao.getProjectCodeByApplicantId(acc.getUser_id());
-            session.setAttribute("projectCode", projectCode);
-            session.setAttribute("account", acc);
-            session.setAttribute("role_name", role_name);
-            
-             if (isFirstLogin(acc)) {
-                response.sendRedirect("updateProfileFirstTime.jsp");
+            if (acc.getIs_active() == 0) {
+                request.setAttribute("mess", "The account does not have access rights");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
             } else {
-                response.sendRedirect("home");
+                //lấy projectcode
+                CandidateDAO cdao = new CandidateDAO();
+                Applications projectCode = cdao.getProjectCodeByApplicantId(acc.getUser_id());
+                session.setAttribute("projectCode", projectCode);
+                session.setAttribute("account", acc);
+                session.setAttribute("role_name", role_name);
+                // Lấy địa chỉ IP WiFi và lưu vào session
+                String wifiIPAddress = getCurrentWiFiIPAddress(request);
+                session.setAttribute("wifiIPAddress", wifiIPAddress);
+
+                if (isFirstLogin(acc)) {
+                    response.sendRedirect("updateProfileFirstTime.jsp");
+                } else {
+                    response.sendRedirect("home");
+                }
             }
         }
     }
-    
+
     private boolean isFirstLogin(Account acc) {
-        return acc.getFull_name() == null ;
+        return acc.getDob() == null;
+    }
+
+    public static String getCurrentWiFiIPAddress(HttpServletRequest request) {
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = interfaces.nextElement();
+                Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress addr = addresses.nextElement();
+                    if (addr instanceof Inet4Address && !addr.isLoopbackAddress()) {
+                        String ipAddress = addr.getHostAddress();
+                        return ipAddress;
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
