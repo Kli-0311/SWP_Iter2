@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import models.Account;
 import models.Attendance;
+import models.AttendanceList;
 
 import models.Interns;
 import models.MemberWithPosition;
@@ -21,6 +22,7 @@ import models.MemberWithPosition;
 import models.Messages;
 import models.Notes;
 import models.Notifications;
+import models.ProjectAttendanceByIntern;
 import models.Projects;
 import models.Reports;
 
@@ -164,8 +166,6 @@ public class InternDao {
             e.printStackTrace();
             return null;
 
-        } finally {
-
         }
     }
 
@@ -184,6 +184,23 @@ public class InternDao {
         } finally {
 
         }
+    }
+
+    public boolean hasAlreadyCheckedIn(int internId, Date date) {
+        String query = "SELECT COUNT(*) FROM [dbo].[Attendance] WHERE intern_id = ? AND date = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, internId);
+            ps.setDate(2, new java.sql.Date(date.getTime()));
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public List<MemberWithPosition> getListMemberProject(String projectCode) {
@@ -235,97 +252,6 @@ public class InternDao {
         return projectCodes;
     }
 
-    public List<Messages> getListMessages(int internId) {
-        List<Messages> list = new ArrayList<>();
-        String query = "SELECT m.message_id, m.sender_id, m.receiver_id, m.message, m.timestamp "
-                + "FROM Messages m "
-                + "JOIN Account a ON a.user_id = m.sender_id "
-                + "JOIN Interns i ON i.user_id = a.user_id "
-                + "WHERE i.intern_id = ?;";
-        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, internId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Messages m = new Messages(
-                            rs.getInt("message_id"),
-                            rs.getString("sender_id"),
-                            rs.getString("receiver_id"),
-                            rs.getString("message"),
-                            rs.getTimestamp("timestamp")
-                    );
-                    list.add(m);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    public List<Messages> getMessagesByReceiverId(int internId, String receiverId) {
-        List<Messages> list = new ArrayList<>();
-        String query = "SELECT m.message_id, m.sender_id, m.receiver_id, m.message, m.timestamp "
-                + "FROM Messages m "
-                + "JOIN Account a ON a.user_id = m.sender_id "
-                + "JOIN Interns i ON i.user_id = a.user_id "
-                + "WHERE i.intern_id = ? AND m.receiver_id = ?;";
-        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, internId);
-            ps.setString(2, receiverId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Messages m = new Messages(
-                            rs.getInt("message_id"),
-                            rs.getString("sender_id"),
-                            rs.getString("receiver_id"),
-                            rs.getString("message"),
-                            rs.getTimestamp("timestamp")
-                    );
-                    list.add(m);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    public int sentMessages(int messageId, String senderId, String receiverId, String message, Timestamp timestamp) {
-        String query = "INSERT INTO [dbo].[Messages] "
-                + "(sender_id, receiver_id, message, timestamp) "
-                + "VALUES (?, ?, ?, ?)";
-        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, senderId);
-            ps.setString(2, receiverId);
-            ps.setString(3, message);
-            ps.setTimestamp(4, timestamp);
-            return ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    public List<String> getInbox(int internId) {
-        List<String> list = new ArrayList<>();
-        String query = "SELECT DISTINCT m.receiver_id "
-                + "FROM Messages m "
-                + "JOIN Account a ON a.user_id = m.sender_id "
-                + "JOIN Interns i ON i.user_id = a.user_id "
-                + "WHERE i.intern_id = ?;";
-        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, internId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    list.add(rs.getString("receiver_id"));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
 //    public void deleteNote(int internId, String noteContent, Date createdAt) {
 //        String query = "DELETE FROM [dbo].[Notes] WHERE [intern_id] = ? AND [note] = ? AND [created_at] = ?";
 //
@@ -366,7 +292,7 @@ public class InternDao {
         }
         return list;
     }
-    
+
     public List<Reports> getListReports(int internId) {
         List<Reports> list = new ArrayList<>();
         String query = "SELECT * FROM Reports WHERE intern_id = ? ORDER BY report_id DESC";
@@ -471,7 +397,7 @@ public class InternDao {
         }
         return null;
     }
-    
+
     public List<Notifications> getAllNotificationByIntern(String userId) {
         List<Notifications> list = new ArrayList<>();
         String query = "SELECT *\n"
@@ -533,7 +459,80 @@ public class InternDao {
         }
         return notification;
     }
-    
+
+    public boolean reportExists(int week, String projectCode) {
+        boolean exists = false;
+        String query = "SELECT COUNT(*) FROM reports WHERE week = ? AND project_code = ?";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, week);
+            ps.setString(2, projectCode);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    exists = rs.getInt(1) > 0;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return exists;
+    }
+
+    public List<Messages> getListQuestion(int internId) {
+        List<Messages> list = new ArrayList<>();
+        String query = "SELECT m.message_id, m.sender_id, m.receiver_id, m.message, m.timestamp, m.subject\n"
+                + "FROM Messages m\n"
+                + "JOIN Account a ON a.user_id = m.sender_id OR a.user_id = m.receiver_id\n"
+                + "JOIN Interns i ON i.user_id = a.user_id\n"
+                + "WHERE i.intern_id = ?\n"
+                + "AND NOT EXISTS (\n"
+                + "    SELECT 1 FROM Messages m2\n"
+                + "    WHERE (m2.sender_id = m.sender_id AND m2.receiver_id = m.receiver_id\n"
+                + "        OR m2.sender_id = m.receiver_id AND m2.receiver_id = m.sender_id)\n"
+                + "    AND m2.subject = m.subject\n"
+                + "    AND m2.timestamp > m.timestamp\n"
+                + ")\n"
+                + "ORDER BY m.timestamp";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, internId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Messages m = new Messages(
+                            rs.getInt("message_id"),
+                            rs.getString("sender_id"),
+                            rs.getString("receiver_id"),
+                            rs.getString("message"),
+                            rs.getTimestamp("timestamp"),
+                            rs.getString("subject")
+                    );
+                    list.add(m);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+   
+    public int sentQuestion(Messages message) {
+        String query = "INSERT INTO [dbo].[Messages] "
+                + "(sender_id, receiver_id, message, timestamp, subject) "
+                + "VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, message.getSenderId());
+            ps.setString(2, message.getReceiverId());
+            ps.setString(3, message.getMessage());
+            ps.setTimestamp(4, message.getTimestamp());
+            ps.setString(5, message.getSubject());
+
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return 0;
+    }
+
     public Date getInternStartDate(String userId) {
         String query = "SELECT start_date FROM [InternSchedule] WHERE user_id = ?";
         try {
@@ -565,24 +564,7 @@ public class InternDao {
         }
         return null;
     }
-    
-    public boolean hasAlreadyCheckedIn(int internId, Date date) {
-        String query = "SELECT COUNT(*) FROM [dbo].[Attendance] WHERE intern_id = ? AND date = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, internId);
-            ps.setDate(2, new java.sql.Date(date.getTime()));
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-    
+
     public String getInternName(String userId) {
         String internName = "";
         String query = "SELECT full_name FROM Account WHERE user_id = ?";
@@ -600,10 +582,262 @@ public class InternDao {
         return internName;
     }
 
-    public static void main(String[] args) {
-        InternDao dao = new InternDao();
+    public List<Attendance> getAttendanceRecords(int internId) {
+        List<Attendance> records = new ArrayList<>();
+        String query = "SELECT date, status FROM attendance WHERE intern_id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, internId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Attendance record = new Attendance();
+                record.setDate(rs.getDate("date"));
+                record.setStatus(rs.getString("status"));
+                records.add(record);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return records;
+    }
 
-        List<models.Certificate> internId = dao.getListCertificate(7);
-        System.out.println(internId);
+    //inter 3 : HUYỀN 
+    //view list attendance 
+    public List<AttendanceList> getAttendanceByIntern(String userId) {
+        List<AttendanceList> list = new ArrayList<>();
+        String query = "SELECT \n"
+                + "    ROW_NUMBER() OVER (ORDER BY a.[date]) as [No], \n"
+                + "    a.[attendance_id], \n"
+                + "    a.[intern_id], \n"
+                + "    i.[user_id], \n"
+                + "    a.[date], \n"
+                + "    a.[status]\n"
+                + "FROM \n"
+                + "    [dbo].[Attendance] a\n"
+                + "JOIN \n"
+                + "    [dbo].[Interns] i ON a.[intern_id] = i.[intern_id]\n"
+                + "WHERE \n"
+                + "    i.[user_id] = ? ";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new AttendanceList(
+                        rs.getInt(1), // No
+                        rs.getInt(2), // attendance_id
+                        rs.getInt(3), // intern_id
+                        rs.getString(4), // user_id
+                        rs.getDate(5), // date
+                        rs.getString(6) // status
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging
+        }
+        return list;
+    }
+
+    // view project name , mentor name của inter đó 
+    public List<ProjectAttendanceByIntern> getProjectInfoByUserID(String userId) {
+        List<ProjectAttendanceByIntern> list = new ArrayList<>();
+        String query = "SELECT i.intern_id,\n"
+                + "       a.full_name AS mentor_name,\n"
+                + "       p.project_name\n"
+                + "FROM [dbo].[Interns] i\n"
+                + "INNER JOIN [dbo].[Account] a ON i.mentor_id = a.user_id\n"
+                + "INNER JOIN [dbo].[Projects] p ON i.project_code = p.project_code\n"
+                + "WHERE i.user_id = ? ";
+
+        try {
+
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new ProjectAttendanceByIntern(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3)
+                ));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging
+        }
+        return list;
+    }
+
+    //phân trang 
+    // hàm đếm xem bảng attendance có bao nhiêu 
+    public int getTotalAttendance(String userId) {
+        String query = "SELECT COUNT(*) FROM [dbo].[Attendance] a \n"
+                + "                 JOIN [dbo].[Interns] i ON a.[intern_id] = i.[intern_id] \n"
+                + "                 WHERE i.[user_id] = ? ";
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);// trong sql nó chỉ trả về 1 kq
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // indext là cái số trang mik nhấn vào 
+    public List<AttendanceList> pagingNews(int index, String userId) {
+        List<AttendanceList> list = new ArrayList<>();
+        String query = "SELECT ROW_NUMBER() OVER (ORDER BY a.[date]) as [No], a.[attendance_id], a.[intern_id], i.[user_id], a.[date], a.[status]\n"
+                + "FROM  [dbo].[Attendance] a\n"
+                + "JOIN  [dbo].[Interns] i ON a.[intern_id] = i.[intern_id]\n"
+                + "WHERE i.[user_id] = ? \n"
+                + "ORDER BY a.[date]\n"
+                + "OFFSET ? ROWS FETCH NEXT 5  ROWS ONLY ";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            ps.setInt(2, (index - 1) * 5);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new AttendanceList(
+                        rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getString(4),
+                        rs.getDate(5),
+                        rs.getString(6)
+                ));
+            }
+        } catch (Exception e) {
+
+        }
+        return list;
+    }
+
+    public List<String> getListMentor(String user_id) {
+        String query = "SELECT mentor_id FROM Interns WHERE user_id = ?";
+        List<String> mentorIds = new ArrayList<>();
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, user_id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String mentorId = rs.getString("mentor_id");
+                if (mentorId != null && !mentorId.isEmpty()) {
+                    mentorIds.add(mentorId);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mentorIds;
+    }
+
+    public List<Messages> SearchBySubject(String subject) {
+        List<Messages> messages = new ArrayList<>();
+        String query = "SELECT message_id, sender_id, receiver_id, message, timestamp, subject "
+                + "FROM Messages WHERE subject LIKE ?";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, "%" + subject + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Messages message = new Messages(
+                            rs.getInt("message_id"),
+                            rs.getString("sender_id"),
+                            rs.getString("receiver_id"),
+                            rs.getString("message"),
+                            rs.getTimestamp("timestamp"),
+                            rs.getString("subject")
+                    );
+                    messages.add(message);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return messages;
+    }
+
+    public Messages getMessageById(int messageId) {
+        Messages message = null;
+        String query = "SELECT message_id, sender_id, receiver_id, message, timestamp, subject FROM Messages WHERE message_id = ?";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, messageId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    message = new Messages(
+                            rs.getInt("message_id"),
+                            rs.getString("sender_id"),
+                            rs.getString("receiver_id"),
+                            rs.getString("message"),
+                            rs.getTimestamp("timestamp"),
+                            rs.getString("subject")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return message;
+    }
+
+    public List<Messages> getSubjectDetail(String subject) {
+        List<Messages> list = new ArrayList<>();
+        String query = "SELECT * FROM Messages WHERE subject = ? ORDER BY timestamp";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, subject);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Messages m = new Messages(
+                            rs.getInt("message_id"),
+                            rs.getString("sender_id"),
+                            rs.getString("receiver_id"),
+                            rs.getString("message"),
+                            rs.getTimestamp("timestamp"),
+                            rs.getString("subject")
+                    );
+                    list.add(m);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+
+    public int sendQuestion(Messages message) {
+        String query = "INSERT INTO [dbo].[Messages] "
+                + "(sender_id, receiver_id, message, timestamp, subject) "
+                + "VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, message.getSenderId());
+            ps.setString(2, message.getReceiverId());
+            ps.setString(3, message.getMessage());
+            ps.setTimestamp(4, message.getTimestamp());
+            ps.setString(5, message.getSubject());
+
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return 0;
+    }
+
+
+    public static void main(String[] args) {
+        
     }
 }

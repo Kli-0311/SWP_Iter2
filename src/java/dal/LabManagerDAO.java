@@ -9,7 +9,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import models.AdminInformation;
+import models.CandidateApplyInformation;
+import models.InternInformation;
 import models.News;
+import models.ProjectInformation;
+import models.UserInformation;
 
 /**
  *
@@ -258,6 +263,232 @@ return list;
         }
         return list;
     }
+    //inter 3
+    public List<UserInformation> selectAllUserMentor() {
+        List<UserInformation> list = new ArrayList<>();
+        String query = "SELECT A.user_id, A.full_name, A.avatar, A.dob, A.gender, A.phone_number, A.is_active, "
+                + "STRING_AGG(P.project_name, ',') , "
+                + "STRING_AGG(P.project_code, ',') , "
+                + "STRING_AGG(CONCAT(CAST(P.project_startday AS VARCHAR), ' - ', CAST(P.project_endday AS VARCHAR)), ',') AS time "
+                + "FROM [dbo].[Account] A "
+                + "LEFT JOIN [dbo].[Projects] P ON A.user_id = P.mentor_id "
+                + "WHERE A.user_id LIKE 'ME%' "
+                + "GROUP BY A.user_id, A.full_name, A.avatar, A.dob, A.gender, A.phone_number, A.is_active";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new UserInformation(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getBoolean(7),
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getString(10)
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    public List<UserInformation> SearchMentorInformation(String SearchMentor) {
+        List<UserInformation> list = new ArrayList<>();
+        String query = "SELECT A.user_id, \n"
+                + "       A.full_name, \n"
+                + "       A.avatar, \n"
+                + "       A.dob, \n"
+                + "       A.gender, \n"
+                + "       A.phone_number, \n"
+                + "       A.is_active,\n"
+                + "       STRING_AGG(P.project_name, ',') AS project_names, \n"
+                + "       STRING_AGG(P.project_code, ',') AS project_codes, \n"
+                + "       STRING_AGG(CONCAT(CAST(P.project_startday AS VARCHAR), ' - ', CAST(P.project_endday AS VARCHAR)), ',') AS time\n"
+                + "FROM [dbo].[Account] A\n"
+                + "LEFT JOIN [dbo].[Projects] P ON A.user_id = P.mentor_id\n"
+                + "WHERE A.full_name LIKE ? AND A.user_id LIKE 'ME%'\n"
+                + "GROUP BY A.user_id, A.full_name, A.avatar, A.dob, A.gender, A.phone_number, A.is_active;";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, "%"+SearchMentor+"%");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new UserInformation(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getBoolean(7),
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getString(10)
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+        
+    }
+   // list inter information 
+    public List<InternInformation> getIntersInforByProjectCode(String projectCode) {
+        List<InternInformation> list = new ArrayList<>();
+        String query = "SELECT i.intern_id, a.user_id, a.full_name, a.specialization, p.position_name, a.avatar, a.dob, a.gender, a.phone_number, a.is_active \n"
+                + "               FROM Interns i \n"
+                + "               JOIN Account a ON i.user_id = a.user_id \n"
+                + "               JOIN Positions p ON i.position_code = p.position_code \n"
+                + "               JOIN Projects pr ON i.project_code = pr.project_code \n"
+                + "               WHERE pr.project_name =?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, projectCode);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new InternInformation(
+                        rs.getInt("intern_id"),
+                        rs.getString("user_id"),
+                        rs.getString("full_name"),
+                        rs.getString("specialization"),
+                        rs.getString("position_name"),
+                        rs.getString("avatar"),
+                        rs.getString("dob"),
+                        rs.getString("gender"),
+                        rs.getString("phone_number"),
+                        rs.getBoolean("is_active")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    // list candidate apply 
+    public List<CandidateApplyInformation> geCandidateApplyInforByProjectCode(String projectName) {
+        List<CandidateApplyInformation> list = new ArrayList<>();
+        String query = "SELECT  a.user_id, a.full_name, a.avatar, a.specialization,p.project_name,pos.position_name,a.dob,a.gender, a.phone_number,app.status,app.application_id\n"
+                + "FROM Applications app\n"
+                + "JOIN Account a ON app.applicant_id = a.user_id\n"
+                + "JOIN Projects p ON app.project_code = p.project_code\n"
+                + "JOIN Positions pos ON app.position_code = pos.position_code\n"
+                + "WHERE p.project_name = ? \n"
+                + "ORDER BY p.project_name;";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, projectName);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new CandidateApplyInformation(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getDate(7),
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getString(10),
+                        rs.getInt(11)
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    // list IT admin 
+    public List<AdminInformation> getUsersWithRoleId1() {
+        List<AdminInformation> list = new ArrayList<>();
+        String query = "SELECT [user_id], [full_name], [dob], [gender], [phone_number], [avatar], [is_active] "
+                + "FROM [Project10].[dbo].[Account] "
+                + "WHERE [role_id] = 1";
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                list.add(new AdminInformation(
+                        rs.getString("user_id"),
+                        rs.getString("full_name"),
+                        rs.getString("dob"),
+                        rs.getString("gender"),
+                        rs.getString("phone_number"),
+                        rs.getString("avatar"),
+                        rs.getBoolean("is_active")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    //list HR information
+    public List<AdminInformation> getUsersWithRoleId3() {
+        List<AdminInformation> list = new ArrayList<>();
+        String query = "SELECT [user_id], [full_name], [dob], [gender], [phone_number], [avatar], [is_active] "
+                + "FROM [Project10].[dbo].[Account] "
+                + "WHERE [role_id] = 3";
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                list.add(new AdminInformation(
+                        rs.getString("user_id"),
+                        rs.getString("full_name"),
+                        rs.getString("dob"),
+                        rs.getString("gender"),
+                        rs.getString("phone_number"),
+                        rs.getString("avatar"),
+                        rs.getBoolean("is_active")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    // list name mentor , name proejct 
+    public List<ProjectInformation> getProjectInfoByProjectName(String projectCode) {
+    List<ProjectInformation> list = new ArrayList<>();
+    String query = "SELECT a.full_name AS fullName, p.project_name AS projectName \n" +
+                   "FROM Account a \n" +
+                   "JOIN Projects p ON a.user_id = p.mentor_id \n" +
+                   "WHERE p.project_name = ?";
+    try {
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(query);
+        ps.setString(1,projectCode );
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            list.add(new ProjectInformation(
+                    rs.getString("fullName"),
+                    rs.getString("projectName")
+            ));
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } 
+    return list;
+}
     
 
 

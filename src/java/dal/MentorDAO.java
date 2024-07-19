@@ -19,38 +19,38 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import models.Account;
+import models.CandidateApply;
 import models.InternSchedule;
 import models.InternWithInternSchedule;
 import models.Interns;
 import models.InterviewSchedule;
+import models.MentorDetail;
+import models.Messages;
 import models.Notifications;
 import models.Project;
 import models.ProjectWithPositions;
 
-
-
 import models.ReportsMentor;
-
 
 /**
  *
  * @author ADM
  */
 public class MentorDAO {
+
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-    
+
     // Method lấy project name theo userID ở thanh select
-    
     public List<Project> getProjectsByUserId(String userId) {
-    String query = "SELECT project_code, project_name FROM Projects WHERE mentor_id = ?";
-    List<Project> list = new ArrayList<>();
-    try {
-        conn = new DBContext().getConnection();
-        ps = conn.prepareStatement(query);
-        ps.setString(1, userId);
-        rs = ps.executeQuery();
+        String query = "SELECT project_code, project_name FROM Projects WHERE mentor_id = ?";
+        List<Project> list = new ArrayList<>();
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new Project(rs.getString("project_code"),
                         rs.getString("project_name")));
@@ -58,18 +58,15 @@ public class MentorDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    return list;
-}
-
-
+        return list;
+    }
 
     // Method get tất cả báo cáo 
-    
     public List<ReportsMentor> getAllReports() {
-        String query = "SELECT i.intern_id, a.full_name, i.project_code, i.position_code, r.week, r.report, r.report_link " +
-                       "FROM Interns i " +
-                       "INNER JOIN Account a ON i.user_id = a.user_id " +
-                       "INNER JOIN Reports r ON i.intern_id = r.intern_id";
+        String query = "SELECT i.intern_id, a.full_name, i.project_code, i.position_code, r.week, r.report, r.report_link "
+                + "FROM Interns i "
+                + "INNER JOIN Account a ON i.user_id = a.user_id "
+                + "INNER JOIN Reports r ON i.intern_id = r.intern_id";
         List<ReportsMentor> list = new ArrayList<>();
         try {
             conn = new DBContext().getConnection();
@@ -88,18 +85,17 @@ public class MentorDAO {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } 
+        }
         return list;
     }
-    
 
     // Method to SELECT  reports by project name
     public List<ReportsMentor> getReportsByProjectName(String projectName) {
-        String query = "SELECT i.intern_id, a.full_name, i.project_code, i.position_code, r.week, r.report, r.report_link " +
-                       "FROM Interns i " +
-                       "INNER JOIN Account a ON i.user_id = a.user_id " +
-                       "INNER JOIN Reports r ON i.intern_id = r.intern_id " +
-                       "WHERE i.project_code = ?";
+        String query = "SELECT i.intern_id, a.full_name, i.project_code, i.position_code, r.week, r.report, r.report_link "
+                + "FROM Interns i "
+                + "INNER JOIN Account a ON i.user_id = a.user_id "
+                + "INNER JOIN Reports r ON i.intern_id = r.intern_id "
+                + "WHERE i.project_code = ?";
         List<ReportsMentor> list = new ArrayList<>();
         try {
             conn = new DBContext().getConnection();
@@ -115,18 +111,18 @@ public class MentorDAO {
                         rs.getInt(5),
                         rs.getString(6),
                         rs.getString(7)
-                        
                 ));
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } 
+        }
         return list;
     }
+
     // chiến 
     public List<Certificate> getListCertificate(String userId) {
         List<Certificate> list = new ArrayList<>();
-        String query = "SELECT * FROM Certificate WHERE sender_id = ?";
+        String query = "SELECT * FROM Certificate WHERE sender_id = ? order by cer_id DESC";
         try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -195,7 +191,8 @@ public class MentorDAO {
         }
         return null;
     }
-public int editCertificate(int cerId, String cerName, Date issueDate, String projectCode, String cerImg, String cerLink, int internId, String senderId) {
+
+    public int editCertificate(int cerId, String cerName, Date issueDate, String projectCode, String cerImg, String cerLink, int internId, String senderId) {
         String query = "UPDATE Certificate SET cer_name = ?, issue_date = ?, project_code = ?, cer_img = ?, cer_link = ?, intern_id = ?, sender_id = ? WHERE cer_id = ?";
         try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
 
@@ -231,7 +228,7 @@ public int editCertificate(int cerId, String cerName, Date issueDate, String pro
             while (rs.next()) {
                 Projects project = new Projects();
                 project.setProjectImg(rs.getString("project_Img"));
-                project.setProjectName(rs.getString("project_code"));
+                project.setProjectName(rs.getString("project_name"));
                 project.setProjectCode(rs.getString("project_code"));
                 projectsList.add(project);
             }
@@ -241,7 +238,7 @@ public int editCertificate(int cerId, String cerName, Date issueDate, String pro
         return projectsList;
     }
 
-        public List<Interns> getInternIdbyProject (String projectCode) {
+    public List<Interns> getInternIdbyProject(String projectCode) {
         List<Interns> list = new ArrayList<>();
         String query = "SELECT  *\n"
                 + "                FROM Interns i\n"
@@ -258,15 +255,13 @@ public int editCertificate(int cerId, String cerName, Date issueDate, String pro
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5)));
-                        
+
             }
         } catch (Exception e) {
         }
         return list;
     }
-    
-    
-   
+
     // đông 
     //lay danh sach project
     public List<Projects> getALLProjectByMentor(String mentor_id) {
@@ -293,6 +288,7 @@ public int editCertificate(int cerId, String cerName, Date issueDate, String pro
     }
 //iter2
     //lay danh sach position
+
     public List<Positions> getAllPositionByProjectCode(String projectCode) {
         List<Positions> list = new ArrayList<>();
         String query = "SELECT  pos.position_code, pos.position_name, pos.position_count\n"
@@ -340,7 +336,7 @@ public int editCertificate(int cerId, String cerName, Date issueDate, String pro
             ps.setTime(6, time);
             ps.setDate(7, new java.sql.Date(date_start.getTime()));
             ps.setDate(8, new java.sql.Date(published_date.getTime()));
-ps.setString(9, room);
+            ps.setString(9, room);
             ps.setString(10, link);
             ps.executeUpdate();
         } catch (Exception e) {
@@ -404,32 +400,32 @@ ps.setString(9, room);
         return list;
     }
 
-    public List<Account> getAllCandidateByProjectCode(String projectCode) {
-        List<Account> list = new ArrayList<>();
-        String query = "SELECT *\n"
-                + "FROM Account ac \n"
-                + "join Applications ap ON ac.user_id = ap.applicant_id\n"
-                + "WHERE ap.project_code LIKE ?";
+    public List<CandidateApply> getAllCandidateByProjectCode(String projectCode) {
+        List<CandidateApply> list = new ArrayList<>();
+        String query = "select u.username, a.project_code,a.position_code,a.status, u.user_id, u.full_name,u.dob,u.gender,u.phone_number,u.specialization\n"
+                + "from Account u\n"
+                + "join Applications a on a.applicant_id = u.user_id\n"
+                + " Where a.project_code LIKE ? and a.status = 'Pending'";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, projectCode);
             rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Account(rs.getString(1),
+                list.add(new CandidateApply(rs.getString(1),
                         rs.getString(2),
                         rs.getString(3),
-rs.getString(4),
-                        rs.getDate(5),
+                        rs.getString(4),
+                        rs.getString(5),
                         rs.getString(6),
-                        rs.getString(7),
+                        rs.getDate(7),
                         rs.getString(8),
                         rs.getString(9),
-                        rs.getInt(10),
-                        rs.getByte(11)));
+                        rs.getString(10)));
             }
+
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         return list;
     }
@@ -488,7 +484,7 @@ rs.getString(4),
                     project.setMentorId(rs.getString("mentor_id"));
                     project.setDescription(rs.getString("project_details"));
                     project.setProjectImage(rs.getString("project_img"));
-project.setProjectStartDay(rs.getDate("project_startday"));
+                    project.setProjectStartDay(rs.getDate("project_startday"));
                     project.setProjectEndDay(rs.getDate("project_endday"));
                     project.setPositions(positionsList); // set the positions list
                 }
@@ -522,42 +518,186 @@ project.setProjectStartDay(rs.getDate("project_startday"));
             e.printStackTrace();
         }
     }
-    
-  /*public static void main(String[] args) {
-    MentorDAO dao = new MentorDAO();
-    String userId = "ME001"; // Thay bằng mentor_id mà bạn muốn kiểm tra
-    List<String> list = dao.getProjectNamesByUserId(userId);
-    
-    if (list.isEmpty()) {
-        System.out.println("No projects found for mentor_id: " + userId);
-    } else {
-        System.out.println("Projects for mentor_id: " + userId);
-        for (String projectName : list) {
-            System.out.println(projectName);
+
+    public boolean certificateExists(int internId, String projectCode) {
+        String query = "SELECT COUNT(*) FROM Certificate WHERE intern_id = ? and project_code like ?";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, internId);
+            ps.setString(2, projectCode);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (Exception e) {
         }
+        return false;
     }
-}*/
-    /*public static void main(String[] args) {
-        // Replace "your_mentor_id_here" with an actual mentor ID from your database
-        String mentorId = "ME001";
 
-        MentorDAO dao = new MentorDAO();
-
-        // Call the DAO method to fetch reports for the mentor ID
-        List<Reports> reportsList = dao.getAlReportsByMentorID(mentorId);
-        // Print the fetched reports
-        for (Reports report : reportsList) {
-            
-            System.out.println("Intern ID: " + report.getInternId());
-            System.out.println("Week: " + report.getWeek());
-            System.out.println("Report: " + report.getReport());
-            System.out.println("Report Link: " + report.getReportLink());
-            System.out.println("Project Code: " + report.getProjectCode());
-            
-            System.out.println("-----------------------");
+    public Notifications getNotificationById(int notificationId) {
+        String query = "SELECT *\n"
+                + "FROM Notifications\n"
+                + "WHERE notification_id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, notificationId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Notifications(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getTime(7),
+                        rs.getDate(8),
+                        rs.getDate(9),
+                        rs.getString(10),
+                        rs.getString(11),
+                        rs.getString(12));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    }*/
-    
+        return null;
+    }
+
+    public int updateNotification(int notificationId, String send_id, String project_code, String position_code, String message, String title, Time time, Date date_start, Date published_date, String room, String link) {
+        String query = "UPDATE [dbo].[Notifications]\n"
+                + "   SET [sender_id] = ?\n"
+                + "      ,[project_code] = ?\n"
+                + "      ,[position_code] =?\n"
+                + "      ,[message] =?\n"
+                + "      ,[title] = ?\n"
+                + "      ,[Time] = ?\n"
+                + "      ,[date_start] = ?\n"
+                + "      ,[published_date] = ?\n"
+                + "      ,[room] = ?\n"
+                + "      ,[link] = ?\n"
+                + " WHERE [notification_id] = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, send_id);
+            ps.setString(2, project_code);
+            ps.setString(3, position_code);
+            ps.setString(4, message);
+            ps.setString(5, title);
+            ps.setTime(6, time);
+            ps.setDate(7, new java.sql.Date(date_start.getTime()));
+            ps.setDate(8, new java.sql.Date(published_date.getTime()));
+            ps.setString(9, room);
+            ps.setString(10, link);
+            ps.setInt(11, notificationId);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();;
+        }
+        return 0;
+    }
+
+    public List<Messages> getMessagesForMentor(String user_id) {
+        List<Messages> messages = new ArrayList<>();
+        String query = "SELECT m.message_id, m.sender_id, m.receiver_id, m.message, m.timestamp, m.subject\n"
+                + "FROM Messages m\n"
+                + "JOIN Account a ON a.user_id = m.sender_id OR a.user_id = m.receiver_id\n"
+                + "WHERE a.user_id = ?\n"
+                + "AND NOT EXISTS (\n"
+                + "    SELECT 1 FROM Messages m2\n"
+                + "    WHERE (m2.sender_id = m.sender_id AND m2.receiver_id = m.receiver_id\n"
+                + "        OR m2.sender_id = m.receiver_id AND m2.receiver_id = m.sender_id)\n"
+                + "    AND m2.subject = m.subject\n"
+                + "    AND m2.timestamp > m.timestamp\n"
+                + ")\n"
+                + "ORDER BY m.timestamp;";
+
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, user_id);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Messages message = new Messages();
+                    message.setMessageId(rs.getInt("message_id"));
+                    message.setSenderId(rs.getString("sender_id"));
+                    message.setReceiverId(rs.getString("receiver_id"));
+                    message.setMessage(rs.getString("message"));
+                    message.setTimestamp(rs.getTimestamp("timestamp"));
+                    message.setSubject(rs.getString("subject"));
+                    messages.add(message);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return messages;
+    }
+
+    public Messages getMessageById(int messageId) {
+        Messages message = null;
+        String query = "SELECT message_id, sender_id, receiver_id, message, timestamp, subject FROM Messages WHERE message_id = ?";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, messageId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    message = new Messages(
+                            rs.getInt("message_id"),
+                            rs.getString("sender_id"),
+                            rs.getString("receiver_id"),
+                            rs.getString("message"),
+                            rs.getTimestamp("timestamp"),
+                            rs.getString("subject")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return message;
+    }
+
+    public List<Messages> getRepliesByMessageId(String subject) {
+        List<Messages> list = new ArrayList<>();
+        String query = "SELECT * FROM Messages WHERE subject = ? ORDER BY timestamp";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, subject);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Messages m = new Messages(
+                            rs.getInt("message_id"),
+                            rs.getString("sender_id"),
+                            rs.getString("receiver_id"),
+                            rs.getString("message"),
+                            rs.getTimestamp("timestamp"),
+                            rs.getString("subject")
+                    );
+                    list.add(m);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public int sendMessage(Messages message) {
+        String query = "INSERT INTO [dbo].[Messages] "
+                + "(sender_id, receiver_id, message, timestamp, subject) "
+                + "VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, message.getSenderId());
+            ps.setString(2, message.getReceiverId());
+            ps.setString(3, message.getMessage());
+            ps.setTimestamp(4, message.getTimestamp());
+            ps.setString(5, message.getSubject());
+
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return 0;
+    }
+
     public List<Projects> getProjectsByUserId2(String userId) {
         String query = "SELECT * FROM Projects WHERE mentor_id = ?";
         List<Projects> list = new ArrayList<>();
@@ -580,7 +720,29 @@ project.setProjectStartDay(rs.getDate("project_startday"));
         }
         return list;
     }
-    
+
+    public List<Interns> getAllInternsByProject(String project_code) {
+        String query = "SELECT * FROM Interns where project_code = ?;";
+        List<Interns> list = new ArrayList<>();
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, project_code);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Interns(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5)));
+            }
+        } catch (Exception e) {
+
+        }
+
+        return list;
+    }
+
     public List<InternWithInternSchedule> getInternsWithScheduleByProject(String projectCode) {
         List<InternWithInternSchedule> list = new ArrayList<>();
         String query = "SELECT a.*, s.start_date, s.end_date, i.intern_id,i.project_code, i.position_code \n"
@@ -618,7 +780,7 @@ project.setProjectStartDay(rs.getDate("project_startday"));
         }
         return list;
     }
-    
+
     public List<InternWithInternSchedule> getInternsWithSchedule() {
         List<InternWithInternSchedule> list = new ArrayList<>();
         String query = "SELECT a.*, s.start_date, s.end_date, i.intern_id,i.project_code, i.position_code \n"
@@ -652,7 +814,64 @@ project.setProjectStartDay(rs.getDate("project_startday"));
         }
         return list;
     }
-    
+
+    public InternSchedule getInternSchedule(String userId) {
+        InternSchedule schedule = null;
+        String query = "SELECT start_date, end_date FROM InternSchedule WHERE user_id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                schedule = new InternSchedule();
+                schedule.setStartDate(rs.getDate("start_date").toLocalDate());
+                schedule.setEndDate(rs.getDate("end_date").toLocalDate());
+            }
+        } catch (Exception e) {
+        }
+        return schedule;
+    }
+
+    public Map<LocalDate, String> getAttendanceRecords(String userId) {
+        Map<LocalDate, String> attendanceRecords = new HashMap<>();
+        String query = "SELECT date, status FROM attendance WHERE intern_id = (SELECT intern_id FROM interns WHERE user_id = ?)";
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                LocalDate date = rs.getDate("date").toLocalDate();
+                String status = rs.getString("status");
+                attendanceRecords.put(date, status);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return attendanceRecords;
+    }
+
+    public int countPresentDays(String userId) {
+        int count = 0;
+        String query = "SELECT COUNT(*) FROM attendance WHERE intern_id = (SELECT intern_id FROM interns WHERE user_id = ?) AND status = 'present'";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+        }
+
+        return count;
+    }
+
     public Map<String, Integer> getPresentDaysByUserId() {
         Map<String, Integer> presentDaysMap = new HashMap<>();
         String query = "SELECT i.user_id, COUNT(a.status) AS present_days "
@@ -674,7 +893,7 @@ project.setProjectStartDay(rs.getDate("project_startday"));
 
         return presentDaysMap;
     }
-    
+
     public Map<String, String> getAllPositions() {
         Map<String, String> positions = new HashMap<>();
         String query = "SELECT position_code, position_name FROM positions";
@@ -694,60 +913,152 @@ project.setProjectStartDay(rs.getDate("project_startday"));
 
         return positions;
     }
-    
-    public InternSchedule getInternSchedule(String userId) {
-        InternSchedule schedule = null;
-        String query = "SELECT start_date, end_date FROM InternSchedule WHERE user_id = ?";
+
+    public List<MentorDetail> getDetailByMentorId(String mentorId) {
+        List<MentorDetail> list = new ArrayList<>();
+        String query = "SELECT DISTINCT a.user_id, a.full_name, a.avatar, a.username,a.gender\n"
+                + "                       FROM Account a \n"
+                + "                       JOIN Projects p ON a.user_id = p.mentor_id \n"
+                + "                       WHERE p.mentor_id = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, userId);
+            ps.setString(1, mentorId);
             rs = ps.executeQuery();
-            if (rs.next()) {
-                schedule = new InternSchedule();
-                schedule.setStartDate(rs.getDate("start_date").toLocalDate());
-                schedule.setEndDate(rs.getDate("end_date").toLocalDate());
+            while (rs.next()) {
+                list.add(new MentorDetail(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5)
+                ));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
-        return schedule;
+        return list;
     }
-    
-    public Map<LocalDate, String> getAttendanceRecords(String userId) {
-        Map<LocalDate, String> attendanceRecords = new HashMap<>();
-        String query = "SELECT date, status FROM attendance WHERE intern_id = (SELECT intern_id FROM interns WHERE user_id = ?)";
 
+    public List<Messages> SearchBySubject(String subject) {
+        List<Messages> messages = new ArrayList<>();
+        String query = "SELECT message_id, sender_id, receiver_id, message, timestamp, subject "
+                + "FROM Messages WHERE subject LIKE ?";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, "%" + subject + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Messages message = new Messages(
+                            rs.getInt("message_id"),
+                            rs.getString("sender_id"),
+                            rs.getString("receiver_id"),
+                            rs.getString("message"),
+                            rs.getTimestamp("timestamp"),
+                            rs.getString("subject")
+                    );
+                    messages.add(message);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return messages;
+    }
+
+    public List<CandidateApply> getAllCandidateByProjectCode2(String projectCode) {
+        List<CandidateApply> list = new ArrayList<>();
+        String query = "select u.username, a.project_code,a.position_code,a.status, u.user_id, u.full_name,u.dob,u.gender,u.phone_number,u.specialization\n"
+                + "from Account u\n"
+                + "join Applications a on a.applicant_id = u.user_id\n"
+                + " Where a.project_code LIKE ? and a.status = 'Pending'";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, projectCode);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new CandidateApply(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getDate(7),
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getString(10)));
+            }
+
+        } catch (Exception e) {
+
+        }
+        return list;
+    }
+
+    // Method get tất cả báo cáo 
+    public List<ReportsMentor> getAllReports(String userId) {
+//        String query = "SELECT i.intern_id, a.full_name, i.project_code, i.position_code, r.week, r.report, r.report_link "
+//                + "FROM Interns i "
+//                + "INNER JOIN Account a ON i.user_id = a.user_id "
+//                + "INNER JOIN Reports r ON i.intern_id = r.intern_id";
+        String query = "SELECT i.intern_id, a.full_name, i.project_code, i.position_code, r.week, r.report, r.report_link \n"
+                + "FROM Interns i \n"
+                + "INNER JOIN Account a ON i.user_id = a.user_id \n"
+                + "INNER JOIN Reports r ON i.intern_id = r.intern_id \n"
+                + "WHERE i.mentor_id =? ";
+        List<ReportsMentor> list = new ArrayList<>();
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, userId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                LocalDate date = rs.getDate("date").toLocalDate();
-                String status = rs.getString("status");
-                attendanceRecords.put(date, status);
+                list.add(new ReportsMentor(
+                        rs.getInt("intern_id"),
+                        rs.getString("full_name"),
+                        rs.getString("project_code"),
+                        rs.getString("position_code"),
+                        rs.getInt("week"),
+                        rs.getString("report"),
+                        rs.getString("report_link")
+                ));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return attendanceRecords;
+        return list;
     }
-}
-    /*public static void main(String[] args) {
-        MentorDAO projectDAO = new MentorDAO();
-        String projectName = "PRJ007"; // Thay bằng tên dự án mà bạn muốn kiểm tra
-        
-        List<ReportsMentor> reports = projectDAO.getReportsByProjectName(projectName);
-        
-        if (reports.isEmpty()) {
-            System.out.println("No reports found for project: " + projectName);
-        } else {
-            System.out.println("Reports for project: " + projectName);
-            for (ReportsMentor report : reports) {
-                System.out.println(report);
+
+
+    public List<CandidateApply> getAllCandidateByProjectCode1(String projectCode) {
+        List<CandidateApply> list = new ArrayList<>();
+        String query = "select u.username, a.project_code,a.position_code,a.status, u.user_id, u.full_name,u.dob,u.gender,u.phone_number,u.specialization\n"
+                + "from Account u\n"
+                + "join Applications a on a.applicant_id = u.user_id\n"
+                + " Where a.project_code LIKE ? and a.status = 'Pending'";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, projectCode);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new CandidateApply(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getDate(7),
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getString(10)));
             }
+
+        } catch (Exception e) {
+
         }
-    }*/
+        return list;
+    }
 
-
+    
+}
