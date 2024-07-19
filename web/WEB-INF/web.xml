@@ -91,18 +91,6 @@
         <servlet-class>controllerITAdmin.SearchAccount</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ViewAccount</servlet-name>
-        <servlet-class>controllerITAdmin.ViewAccount</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>SearchAccount</servlet-name>
-        <url-pattern>/searchAccount</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ViewAccount</servlet-name>
-        <url-pattern>/viewAccount</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>CreateAccount</servlet-name>
         <servlet-class>controllerITAdmin.CreateAccount</servlet-class>
     </servlet>
@@ -638,25 +626,22 @@
         <servlet-name>CandidatesApplyInformation</servlet-name>
         <url-pattern>/CandidatesApplyInformation</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>HRInformation</servlet-name>
-        <servlet-class>controllerLabManager.HRInformation</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>HRInformation</servlet-name>
         <url-pattern>/HRInformation</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>ViewAttendanceList</servlet-name>
-        <servlet-class>controllerIntern.ViewAttendanceList</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>ViewAttendanceList</servlet-name>
         <url-pattern>/ViewAttendanceList</url-pattern>
     </servlet-mapping>
-    
-    
-    
+    <servlet>
+        <servlet-name>HRInformation</servlet-name>
+        <servlet-class>controllerLabManager.HRInformation</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewAttendanceList</servlet-name>
+        <servlet-class>controllerIntern.ViewAttendanceList</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SetWifiIPAddress</servlet-name>
         <url-pattern>/setWifiIPAddress</url-pattern>
@@ -673,18 +658,6 @@
     <servlet>
         <servlet-name>MentorManage</servlet-name>
         <servlet-class>controllerHR.MentorManage</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>FeebbackRecruitmentRequirement</servlet-name>
-        <servlet-class>controllerMentor.FeebbackRecruitmentRequirement</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>UpdateInterviewSchedule</servlet-name>
-        <servlet-class>controllerHR.UpdateInterviewSchedule</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>UpdateNotification</servlet-name>
-        <servlet-class>controllerMentor.UpdateNotification</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>EvaluateManage</servlet-name>
@@ -714,18 +687,7 @@
         <servlet-name>MentorManage</servlet-name>
         <url-pattern>/mentorManage</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>FeebbackRecruitmentRequirement</servlet-name>
-        <url-pattern>/feebbackRecruitmentRequirement</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UpdateInterviewSchedule</servlet-name>
-        <url-pattern>/updateInterviewSchedule</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UpdateNotification</servlet-name>
-        <url-pattern>/updateNotification</url-pattern>
-    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>EvaluateManage</servlet-name>
         <url-pattern>/evaluateManage</url-pattern>
