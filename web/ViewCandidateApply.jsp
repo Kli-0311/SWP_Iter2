@@ -25,7 +25,7 @@
         <jsp:include page="header.jsp"></jsp:include>
             <div class="container">
             <c:if test="${empty listCandidate}">
-                
+                hahahah
             </c:if>
             <c:if test="${not empty listCandidate}">
                 <div class="content">
@@ -37,8 +37,8 @@
                             <tr>
                                 <th>Project Code</th>
                                 <th>Position Code</th>
-                                <th>Status</th>
-                                <th>User ID</th>
+                                <!--<th>Status</th>-->
+                                <th>Roll Number</th>
                                 <th>Full Name</th>
                                 <th>Date Of Birth</th>
                                 <th>Gender</th>
@@ -51,7 +51,7 @@
                                 <tr>
                                     <td>${p.projectCode}</td>
                                     <td>${p.positionCode}</td>
-                                    <td>${p.status}</td>
+                                    <!--<td>${p.status}</td>-->
                                     <td>${p.userId}</td>
                                     <td>${p.full_name}</td>
                                     <td>${p.dob}</td>

@@ -37,7 +37,7 @@
     <body>
         <%@ include file="header.jsp" %>
         <div class="container">
-            <h3 class="table-header">List of Candidates Without Internship Schedule</h3>
+            <h3 class="table-header">Candidates & Interns Without Schedule</h3>
             <form action="createInternSchedule" method="post" onsubmit="return prepareData()">
                 <div class="table-responsive">
                     <table id="candidateTableNoSchedule" class="table table-bordered table-hover">
@@ -82,7 +82,7 @@
             <p style="color: red">${error}</p>
 
 
-            <h3 class="table-header">List of Candidates With Internship Schedule</h3>
+            <h3 class="table-header">Candidates & Interns With Schedule</h3>
             <div class="table-responsive">
                 <table id="candidateTableWithSchedule" class="table table-bordered table-hover">
                     <thead class="thead-dark">
@@ -111,7 +111,7 @@
                                 <td>${p.start_date}</td>
                                 <td>${p.end_date}</td>
                                 <td>${p.calculateWorkingDays()}</td> 
-                                <td><a href="updateInternSchedule.jsp?user_id=${p.user_id}&full_name=${p.full_name}&start_date=${p.start_date}&end_date=${p.end_date}" class="btn btn-warning">Edit</a></td>
+                                <td><a href="updateInternSchedule.jsp?user_id=${p.user_id}&full_name=${p.full_name}&start_date=${p.start_date}&end_date=${p.end_date}" class="btn btn-warning">Update</a></td>
                             </tr>
                         </c:forEach>
                     </tbody>

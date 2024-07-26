@@ -1,52 +1,106 @@
-<%-- 
-    Document   : createAccountCandidate
-    Created on : Jun 7, 2024, 2:05:08 AM
-    Author     : ADMIN
---%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-        <link rel="stylesheet" href="css/signup.css">
+        <meta charset="UTF-8">
+        <title>Create Candidate Account</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+        <style>
+            body {
+                background-color: #f5f5f5;
+                font-family: 'Arial', sans-serif;
+            }
+            .container {
+                background: #fff;
+                border-radius: 10px;
+                padding: 30px;
+                box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+                margin-top: 50px;
+            }
+            .page-title {
+                text-align: center;
+                font-size: 2.5rem;
+                color: #007bff;
+                margin-bottom: 30px;
+                animation: fadeInDown 1s forwards;
+            }
+            .form-section {
+                text-align: center;
+                animation: fadeInUp 1s forwards;
+            }
+            .form-section h2 {
+                color: #28a745;
+                margin-bottom: 20px;
+                font-size: 1.8rem;
+            }
+            .upload-form {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                animation: fadeIn 1s forwards;
+            }
+            .upload-form input[type="file"] {
+                margin-bottom: 20px;
+                padding: 10px;
+                border: 1px solid #ced4da;
+                border-radius: 5px;
+                outline: none;
+                width: 250px;
+            }
+            .upload-form input[type="submit"] {
+                padding: 10px 30px;
+                border: none;
+                border-radius: 5px;
+                background-color: #28a745;
+                color: #fff;
+                cursor: pointer;
+                outline: none;
+                transition: background-color 0.3s ease;
+            }
+            .upload-form input[type="submit"]:hover {
+                background-color: #218838;
+            }
+            .back-link {
+                margin-top: 20px;
+                text-align: center;
+            }
+            .back-link a {
+                color: #007bff;
+                text-decoration: none;
+            }
+            .back-link a:hover {
+                text-decoration: underline;
+            }
+        </style>
     </head>
     <body>
-        <div class="signup-container">
-            <h2>Create an account for candidate</h2>
-            <form action="createAccountCandidate" method="post">
-                <input type="text" id="user_id" name="user_id" placeholder="User ID" required>
+        <jsp:include page="header.jsp" />
 
-                <input type="text" id="username" name="username" placeholder="Username" required>
+        <div class="container">
+            <h1 class="page-title animate__animated animate__fadeInDown">Create Account for Candidates</h1>
 
-                <select name="role_id" required>
-                    <option value="6">Candidate</option>
-                </select>
-
-                <input type="submit" value="Create account">
-
-                
-          <!-- Hiển thị thông báo lỗi -->
-                <c:if test="${not empty messErrorUsername}">
-                    <p class="error">${messErrorUsername}</p>
-                </c:if>
-
-                <!-- Hiển thị thông báo thành công -->
-                <c:if test="${not empty successMessage}">
-                    <p class="success">${successMessage}</p>
-                </c:if>
-
-                <!-- Hiển thị thông báo lỗi chung -->
-                <c:if test="${not empty errorMessage}">
-                    <p class="error">${errorMessage}</p>
-                </c:if>
-                <div class="links">
-                    <a href="home.jsp">Back to Home</a>
+            <div class="form-section">
+                <h2>Upload Excel File</h2>
+                <div class="upload-form" >
+                    <form action="createAccountCandidate" method="post" enctype="multipart/form-data">
+                        <input type="file" name="file" accept=".xlsx">
+                        <br>
+                        <input type="submit" value="Upload">
+                    </form>
                 </div>
-            </form>
+            </div>
 
+            <div class="back-link">
+                <a href="home.jsp">Back to Home</a>
+            </div>
         </div>
 
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </body>
 </html>

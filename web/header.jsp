@@ -28,7 +28,7 @@
                 align-items: center;
                 min-height: 70px;
                 width: 100%;
-                background-color: #f27125;
+                background-color: #F05123;
                 padding: 0 20px;
             }
 
@@ -187,7 +187,7 @@
             .footer {
                 position: static;
                 width: 100%;
-                background-color: #111;
+                background-color: #F05123;
                 color: white;
                 text-align: center;
                 padding: 10px;
@@ -326,6 +326,7 @@
                             <li class="nav-links-item-li"><a href="sendQuestion?user_id=${sessionScope.account.user_id}">Ask mentor</a></li>
                             <li class="nav-links-item-li"><a href="askMentor?user_id=${sessionScope.account.user_id}">List Question</a></li>
                             <li class="nav-links-item-li" ><a href="ViewAttendanceList?user_id=${sessionScope.account.user_id}">View Attendance</a></li>
+                            <li class="nav-links-item-li" ><a href="ViewGradeByInterns">View Grade</a></li>
 
                         </ul>
                     </c:if>
@@ -334,10 +335,11 @@
                             <li class="nav-links-item-li"><a href="home.jsp">Home Mentor</a></li>
                             <li class="nav-links-item-li"><a href="viewUserAccount?service=ViewListCandidate">Candidate Apply</a></li>
                             <li class="nav-links-item-li"><a href="myProject?userId=${sessionScope.account.user_id}">My Project</a></li>
-                            <li class="nav-links-item-li" ><a href="addCertificate?user_id=${sessionScope.account.user_id}">Add Certificate</a></li>
-                            <li class="nav-links-item-li"><a href="CheckAttendance">Check Attendance</a></li>
+                            <li class="nav-links-item-li" ><a href="ViewCetificatebyMentor?user_id=${sessionScope.account.user_id}">Certificate Manage</a></li>
                             <li class="nav-links-item-li"><a href="ViewReportsMentor">Report Manage </a></li>
-                            <li class="nav-links-item-li"><a href="submitRecruiment">Submit Recruitment</a></li>
+                            <li class="nav-links-item-li"><a href="mentorMessages?user_id=${sessionScope.account.user_id}">Mentor Messages</a></li>
+                            <li class="nav-links-item-li"><a href="attendanceAndSchedule">Check Attendance</a></li>
+                            <li class="nav-links-item-li"><a href="submitRecruiment">Send Recruitment</a></li>
                         </ul>
                     </c:if>
                     <c:if test="${sessionScope.account.role_id == 3}">
@@ -352,6 +354,7 @@
                             <li class="nav-links-item-li"><a href="home.jsp">Home Lab manage</a></li>
                             <li class="nav-links-item-li"><a href="NewsManage"> News Manage</a></li>
                             <li class="nav-links-item-li"><a href="gradeManage">Grade Manage</a></li>
+                            <li class="nav-links-item-li"><a href="UsersInformation">User Information</a></li>
                         </ul>
                     </c:if>
                     <c:if test="${sessionScope.account.role_id == 1}">
@@ -362,7 +365,6 @@
                             <li class="nav-links-item-li"><a href="ViewUserInfor.jsp">View User Information</a></li>
                             <li class="nav-links-item-li"><a href="viewAccount">View Account</a></li>
                             <li class="nav-links-item-li"><a href="viewCreateInternSchedule">Create Intern Schedule</a></li>
-                            <li class="nav-links-item-li"><a href="viewSetIPAddress">Set IP Address</a></li>
                         </ul>
                     </c:if>
                 </div>

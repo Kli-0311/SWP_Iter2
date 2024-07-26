@@ -41,27 +41,24 @@ public class AttendanceAndSchedule extends HttpServlet {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         String userId = account.getUser_id();
-
         MentorDAO dao = new MentorDAO();
         List<Projects> projects = dao.getProjectsByUserId2(userId);
         request.setAttribute("projects", projects);
-
+        
         String selectedProject = request.getParameter("selectedProject");
         request.setAttribute("selectedProject", selectedProject);
-
+        
         List<InternWithInternSchedule> internList;
         if (selectedProject != null && !selectedProject.isEmpty() && !selectedProject.equals("all")) {
             internList = dao.getInternsWithScheduleByProject(selectedProject);
         } else {
             internList = dao.getInternsWithSchedule();
         }
-
         Map<String, Integer> present_days = dao.getPresentDaysByUserId();
         Map<String, String> positions = dao.getAllPositions();
-
         request.setAttribute("internList", internList);
         request.setAttribute("present_days", present_days);
-        request.setAttribute("positions", positions);
+        request.setAttribute("positions", positions);   
 
         request.getRequestDispatcher("AttendanceManagement.jsp").forward(request, response);
 

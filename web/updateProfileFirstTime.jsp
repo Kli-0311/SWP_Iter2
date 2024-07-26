@@ -19,7 +19,7 @@
             <form action="updateFirst" method="post" enctype="multipart/form-data">
                 <input type="hidden" id="username" name="userName" placeholder="Username" value="${sessionScope.account.username}" required>
 
-                <input type="text" id="fullName" name="fullName" placeholder="Full Name" value="${param.fullName}" required>
+<!--                <input type="text" id="fullName" name="fullName" placeholder="Full Name" value="${param.fullName}" required>-->
 
                 <label for="dob">Date of Birth</label>
                 <input type="date" id="dob" name="dob" value="${param.dob}" required>

@@ -40,6 +40,23 @@ public class CandidateDAO extends DBContext {
         }
     }
 
+    public boolean hasAlreadyApplied(String userId, String projectCode) {
+        String query = "SELECT COUNT(*) FROM Applications WHERE applicant_id = ? AND project_code = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            ps.setString(2, projectCode);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (Exception e) {
+        }
+        return false;
+    }
+
     public Applications getProjectCodeByApplicantId(String applicant_id) {
         String query = "Select project_code from Applications Where applicant_id = ?";
         try {
@@ -137,6 +154,7 @@ public class CandidateDAO extends DBContext {
         }
         return list;
     }
+
     public List<ProjectPass> getAllProjectPass(String userId) {
         List<ProjectPass> list = new ArrayList<>();
         String query = "Select p.project_code, p.project_name, p.mentor_id, p.project_details, p.project_img , p.project_startday, p.project_endday, a.position_code\n"

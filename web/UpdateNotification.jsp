@@ -11,26 +11,26 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
-    <body>
+     <body>
         <jsp:include page="header.jsp"></jsp:include>
         <c:if test="${notificationUpdate ne null}">
             <div class="container mt-8">
                 <h1 class="font-weight-semi-bold text-uppercase mb-3 text-center">
-                    Update Interview Schedule
+                    Update Announcements
                 </h1>
                 <form action="updateNotification" method="get" id="updateNotification" enctype="multipart/form-data">
                     <input type="hidden" name="service" value="sendUpdateDetail" />
                     <div class="mb-3">
-                        <label for="notificationId" class="form-label">Notification ID</label>
-                        <input type="text" class="form-control" id="notificationId" name="notificationId" value="${notificationUpdate.notification_id}" readonly required>
+                        <!--<label for="notificationId" class="form-label">Notification ID</label>-->
+                        <input type="hidden" class="form-control" id="notificationId" name="notificationId" value="${notificationUpdate.notification_id}" readonly required>
                     </div>
                     <div class="mb-3">
-                        <label for="send_id" class="form-label">Mentor ID</label>
-                        <input type="text" class="form-control" id="send_id" name="send_id" value="${notificationUpdate.sender_id}" readonly required>
+                        <!--<label for="send_id" class="form-label">Mentor ID</label>-->
+                        <input type="hidden" class="form-control" id="send_id" name="send_id" value="${notificationUpdate.sender_id}" readonly required>
                     </div>
                     <div class="mb-3">
-                        <label for="project_code" class="form-label">Project Code</label>
-                        <input type="text" class="form-control" id="project_code" name="project_code" value="${notificationUpdate.project_code}" readonly required>
+                        <!--<label for="project_code" class="form-label">Project Code</label>-->
+                        <input type="hidden" class="form-control" id="project_code" name="project_code" value="${notificationUpdate.project_code}" readonly required>
                     </div>
                     <div class="mb-3">
                         <label for="position_code" class="form-label">Position Code</label>

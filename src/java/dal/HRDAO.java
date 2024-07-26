@@ -402,4 +402,105 @@ public class HRDAO extends DBContext {
         }
         return 0;
     }
+    
+     public List<ProjectWithPositions> searchProjectList(String searchProjectList) {
+        List<ProjectWithPositions> list = new ArrayList<>();
+        String query  = "SELECT * FROM Projects WHERE project_name LIKE ?";
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query); 
+            ps.setString(1, "%" + searchProjectList + "%");
+            rs = ps.executeQuery();
+        
+            while (rs.next()) {
+                ProjectWithPositions project = new ProjectWithPositions();
+                project.setProjectCode(rs.getString("project_code"));
+                project.setProjectName(rs.getString("project_name"));
+                project.setMentorId(rs.getString("mentor_id"));
+                project.setProjectImage(rs.getString("project_img"));
+                project.setDescription(rs.getString("project_details"));
+                project.setProjectStartDay(rs.getDate("project_startday"));
+                project.setProjectEndDay(rs.getDate("project_endday"));
+                
+                // Fetch positions for the project
+                project.setPositions(getPositionsForProject(rs.getString("project_code"), conn));
+                
+                list.add(project);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+        return list;
+    }
+     
+       private List<Positions> getPositionsForProject(String projectCode, Connection conn) {
+        List<Positions> positionsList = new ArrayList<>();
+        String positionsQuery = "SELECT * FROM Positions WHERE project_code = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(positionsQuery)) {
+            ps.setString(1, projectCode);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Positions position = new Positions();
+                    position.setPositionCode(rs.getString("position_code"));
+                    position.setPositionName(rs.getString("position_name"));
+                    position.setPositionCount(rs.getInt("position_count"));
+                    positionsList.add(position);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return positionsList;
+    }
+       
+       //phân trang 
+    public int getTotalProjects() {
+        String query = "SELECT COUNT(*) FROM Projects";
+        
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);// trong sql nó chỉ trả về 1 kq
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+        return 0 ;
+    
+    }
+    public List<ProjectWithPositions> pagingProjects(int index) {
+        List<ProjectWithPositions> list = new ArrayList<>();
+        String query = "SELECT *from Projects\n"
+                + "                ORDER BY project_code\n"
+                + "                OFFSET ? ROWS FETCH NEXT 4 ROWS ONLY";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, (index-1)*4);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                ProjectWithPositions project = new ProjectWithPositions();
+                project.setProjectCode(rs.getString("project_code"));
+                project.setProjectName(rs.getString("project_name"));
+                project.setMentorId(rs.getString("mentor_id"));
+                project.setProjectImage(rs.getString("project_img"));
+                project.setDescription(rs.getString("project_details"));
+                project.setProjectStartDay(rs.getDate("project_startday"));
+                project.setProjectEndDay(rs.getDate("project_endday"));
+                
+                // Fetch positions for the project
+                project.setPositions(getPositionsForProject(rs.getString("project_code"), conn));
+                
+                list.add(project);
+            }
+        }catch(Exception e){
+            
+        }
+        return list;
+    }
 }

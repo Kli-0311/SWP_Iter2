@@ -10,7 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-             <style>
+        <style>
             .container {
                 width: 100%;
                 max-width: 800px;
@@ -57,15 +57,17 @@
             <div class="container">
                 <h3 class="text-center">Grade report for ${fullName}</h3>
                 <c:if test="${done ne null}">
-                    <h3 class="font-weight-semi-bold text-uppercase mb-3 text-center">
+                    <h5 class="font-weight-semi-bold mb-3 text-center text-danger">
                         ${done}
-                    </h3>
+                    </h5>
                 </c:if>
                 <c:choose>
                     <c:when test="${finalEvaluation == null}">
                         <form action="evaluateManage" method="get">
                             <input type="hidden" name="service" value="InsertFinal"/>
                             <input type="hidden" name="internId" value="${internId}"/>
+                            <input type="hidden" name="fullName" value="${fullName}"/>
+
                             <input type="hidden" name="mentorid" value="${sessionScope.account.user_id}"/>
                             <input type="hidden" name="type" value="Final"/>
                             <input type="hidden" name="projectCode" value="${intern.projectCode}"/>
@@ -78,7 +80,7 @@
                                     <th>VALUE</th>
                                 </tr>
                                 <tr>
-                                    <td>Midterm</td>
+                                    <td>Final</td>
                                     <td>Major Knowledge and Skills</td>
                                     <td>30%</td>
                                     <td><input class="w-100" type="number" name="attitude_score" id="attitude_score" oninput="calculateTotals()" value="0" min="0" max="10"></td>
@@ -92,7 +94,7 @@
                                 <tr>
                                     <td></td>
                                     <td>Attitude</td>
-                                    <td>30%</td>
+                                    <td>40%</td>
                                     <td><input class="w-100" type="number" name="technical_skills_score" id="technical_skills_score" oninput="calculateTotals()" value="0" min="0" max="10"></td>
                                 </tr>
                                 <tr>
@@ -110,6 +112,9 @@
                     <c:otherwise>
                         <form action="evaluateManage" method="get">
                             <input type="hidden" name="service" value="UpdateFinal"/>
+                            <input type="hidden" name="internId" value="${internId}"/>
+                            <input type="hidden" name="fullName" value="${fullName}"/>
+
                             <input type="hidden" name="evaluationId" value="${finalEvaluation.evaluation_id}"/>
                             <input type="hidden" name="projectCode" value="${finalEvaluation.projectCode}"/>
                             <input type="hidden" name="internId" value="${finalEvaluation.internId}"/>
@@ -122,7 +127,7 @@
                                     <th>VALUE</th>
                                 </tr>
                                 <tr>
-                                    <td>Midterm</td>
+                                    <td>Final</td>
                                     <td>Major Knowledge and Skills</td>
                                     <td>30%</td>
                                     <td><input class="w-100" type="number" name="attitude_score" id="attitude_score" oninput="calculateTotals()" value="${finalEvaluation.attitude_score}" min="0" max="10"></td>
@@ -136,7 +141,7 @@
                                 <tr>
                                     <td></td>
                                     <td>Attitude</td>
-                                    <td>30%</td>
+                                    <td>40%</td>
                                     <td><input class="w-100" type="number" name="technical_skills_score" id="technical_skills_score" oninput="calculateTotals()" value="${finalEvaluation.technical_skills_score}" min="0" max="10"></td>
                                 </tr>
                                 <tr>
@@ -159,7 +164,7 @@
                 const midterm1 = parseFloat(document.getElementById('attitude_score').value) || 0;
                 const midterm2 = parseFloat(document.getElementById('soft_skills_score').value) || 0;
                 const midterm3 = parseFloat(document.getElementById('technical_skills_score').value) || 0;
-                const midtermTotal = (midterm1 + midterm2 + midterm3);
+                const midtermTotal = (midterm1 * 0.4 + midterm2 * 0.3 + midterm3 * 0.3);
                 document.getElementById('total').value = midtermTotal.toFixed(2);
 
             }

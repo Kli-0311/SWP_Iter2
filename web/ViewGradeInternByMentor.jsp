@@ -10,7 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Grade Interns</title>
-        <style>
+ <style>
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
@@ -139,19 +139,20 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>STT</th>
+                            <th>TT No</th>
                             <th>Roll Number</th>
                             <th>Intern ID</th>
                             <th>Full Name</th>
                             <th>Position Name</th>
                             <th>Project Name</th>
+                            <th>Mentor ID</th>
                             <th>Type</th>
                             <th>Comment</th>
                             <th>Attitude Score</th>
                             <th>Soft Skills Score</th>
                             <th>Technical Skills Score</th>
                             <th>Total Score</th>
-                            
+
                         </tr>
                     </thead>
                     <tbody>
@@ -163,13 +164,13 @@
                                 <td>${grade.fullName}</td>
                                 <td>${grade.positionName}</td>
                                 <td>${grade.projectName}</td>
+                                <td>${grade.mentorId}</td>
                                 <td>${grade.type}</td>
                                 <td>${grade.comment}</td>
                                 <td>${grade.attitude_score}</td>
                                 <td>${grade.soft_skills_score}</td>
                                 <td>${grade.technical_skills_score}</td>
                                 <td>${grade.total_score}</td>
-                                
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -230,6 +231,15 @@
                         </c:forEach>
                     </tbody>
                 </table>
+                <script>
+                    function filterReports() {
+                        var type = document.getElementById("projectFilter").value;
+                        var projectCode = '<%= request.getParameter("projectCode") %>'; // Add projectCode to the URL
+                        var url = "projectManageByMentor?service=viewGrade&projectCode=" + projectCode + "&selectedProject=" + type;
+                        window.location.href = url;
+                    }
+                </script>
+
             </c:if>
         </div>
     </body>

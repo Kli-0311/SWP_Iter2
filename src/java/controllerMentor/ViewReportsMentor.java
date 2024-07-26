@@ -81,7 +81,7 @@ public class ViewReportsMentor extends HttpServlet {
         if (selectedProject != null && !selectedProject.isEmpty() && !selectedProject.equals("all")) {
             reportsList = dao.getReportsByProjectName(selectedProject);
         } else {
-            reportsList = dao.getAllReports(userId);
+            reportsList = dao.getAllReports();
         }
 
         Map<String, ReportGroup> groupedReportsMap = new HashMap<>();

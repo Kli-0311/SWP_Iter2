@@ -11,7 +11,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
-    <body>
+     <body>
         <jsp:include page="header.jsp"></jsp:include>
         <c:if test="${sessionScope.account.role_id == 6}">
             <div class="container">
@@ -127,17 +127,17 @@
                 </c:if>
                 <!-- Notification Insert -->
                 <c:if test="${InsertDone ne null}">
-                    <h3 class="font-weight-semi-bold text-uppercase mb-3 text-center">
+                    <h4 class="font-weight-semi-bold text-uppercase mb-3 text-danger">
                         ${InsertDone}
-                    </h3>
+                    </h4>
                 </c:if>
                 <c:if test="${not empty allInterviewSchedule}">
                     <div class="col-lg-12 table-responsive mb-5">
                         <table class="table table-bordered text-center mb-0">
                             <thead class="bg-secondary text-dark">
                                 <tr>
-                                    <th>Interview Schedule ID</th>
-                                    <th>Send ID</th>
+                                    <!--<th>Interview Schedule ID</th>-->
+                                    <!--<th>Send ID</th>-->
                                     <th>Mentor ID</th>
                                     <th>Project Code</th>
                                     <th>Room</th>
@@ -151,8 +151,8 @@
                             <tbody class="align-middle">
                                 <c:forEach items="${allInterviewSchedule}" var="noti">
                                     <tr>
-                                        <td class="align-middle">${noti.interviewschedule_id}</td>
-                                        <td class="align-middle">${noti.sender_id}</td>
+                                        <!--<td class="align-middle">${noti.interviewschedule_id}</td>-->
+                                        <!--<td class="align-middle">${noti.sender_id}</td>-->
                                         <td class="align-middle">${noti.mentor_id}</td>
                                         <td class="align-middle">${noti.project_code}</td>
                                         <td class="align-middle">${noti.room}</td>
@@ -161,6 +161,7 @@
                                         <td class="align-middle">${noti.title}</td>
                                         <td class="align-middle">${noti.message}</td>
                                         <td class="align-middle">
+                                            <a href="updateInterviewSchedule?service=requestUpdate&interviewScheduleId=${noti.interviewschedule_id}">Update</a>
                                             <a href="deleteControll?service=deleteInterviewSchedule&interviewschedule_id=${noti.interviewschedule_id}" onclick="return confirmDelete('${noti.interviewschedule_id}')">Delete</a>
                                         </td>
                                     </tr>

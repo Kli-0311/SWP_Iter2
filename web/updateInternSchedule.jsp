@@ -15,7 +15,7 @@
 <body>
     <%@ include file="header.jsp" %>
     <div class="container">
-        <h1>Edit Intern Schedule</h1>
+        <h1>Update Intern Schedule</h1>
         <form action="updateInternSchedule" method="post">
             <div class="form-group">
                 <label for="user_id">User ID:</label>

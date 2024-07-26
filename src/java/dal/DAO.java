@@ -47,6 +47,38 @@ public class DAO {
         }
         return null;
     }
+    
+//    private MD5 md5 = new MD5();
+//
+//    public Account login(String username, String password) {
+//        String hashedPassword = md5.getMd5(password); // Mã hóa mật khẩu đầu vào
+//
+//        String query = "SELECT * FROM Account WHERE username = ? AND password = ?";
+//
+//        try {
+//            conn = new DBContext().getConnection();
+//            ps = conn.prepareStatement(query);
+//            ps.setString(1, username);
+//            ps.setString(2, hashedPassword); // Sử dụng mật khẩu đã mã hóa
+//            rs = ps.executeQuery();
+//            if (rs.next()) {
+//                return new Account(rs.getString(1),
+//                        rs.getString(2),
+//                        rs.getString(3),
+//                        rs.getString(4),
+//                        rs.getDate(5),
+//                        rs.getString(6),
+//                        rs.getString(7),
+//                        rs.getString(8),
+//                        rs.getString(9),
+//                        rs.getInt(10),
+//                        rs.getByte(11));
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace(); // In lỗi ra để debug nếu có vấn đề
+//        } 
+//        return null;
+//    }
 
     public Account getAccount(String username, String password) {
         String query = "select * from Account where username = ? and password = ?";
@@ -102,20 +134,20 @@ public class DAO {
         return null;
     }
 
-    public void updateAccount(String userName, String password, String full_name, Date dob, String gender, String phone_number, String avatar, String specialization) {
-        String query = "UPDATE Account SET password = ?,full_name = ?, dob = ?, gender = ?, phone_number = ?, avatar = ?, specialization = ?  WHERE username = ?";
+    
+    public void updateAccount(String userName, String password, Date dob, String gender, String phone_number, String avatar, String specialization) {
+        String query = "UPDATE Account SET password = ?,dob = ?, gender = ?, phone_number = ?, avatar = ?, specialization = ?  WHERE username = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, password);
-            ps.setString(2, full_name);
-            ps.setDate(3, new java.sql.Date(dob.getTime()));
-            ps.setString(4, gender);
-            ps.setString(5, phone_number);
-            ps.setString(6, "img/" + avatar);
-            ps.setString(7, specialization);
+            ps.setDate(2, new java.sql.Date(dob.getTime()));
+            ps.setString(3, gender);
+            ps.setString(4, phone_number);
+            ps.setString(5, "img/" + avatar);
+            ps.setString(6, specialization);
 
-            ps.setString(8, userName);
+            ps.setString(7, userName);
             ps.executeUpdate();
         } catch (Exception e) {
         }

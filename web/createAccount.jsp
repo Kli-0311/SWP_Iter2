@@ -59,7 +59,7 @@
             </div>
 
             <div class="input-container">
-                <input type="password" id="password" name="password" placeholder="Password" required>
+<input type="password" id="password" name="password" placeholder="Password" required>
                 <span id="password-eye-icon" class="eye-icon" onclick="togglePasswordVisibility('password')">👁</span>
             </div>
 
@@ -100,4 +100,20 @@
         </form>
     </div>
 </body>
+
+        <script>
+            // Function to toggle password visibility
+            function togglePasswordVisibility(id) {
+                var passwordField = document.getElementById(id);
+                var eyeIcon = document.getElementById(id + '-eye-icon');
+                if (passwordField.type === "password") {
+                    passwordField.type = "text";
+                    eyeIcon.textContent = "🙈"; // Change icon to hide password
+                } else {
+                    passwordField.type = "password";
+                    eyeIcon.textContent = "👁"; // Change icon to show password
+                }
+            }
+        </script>
+
 </html>

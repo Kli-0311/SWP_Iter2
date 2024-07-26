@@ -112,10 +112,11 @@
                 <div class="content">
                     <!--<h1 style="color: #202942;">Web quản lý thực tập sinh tại DX-LAB</h1>-->
                 </div>
-                <div><img style="width: 1200px; margin-bottom: 50px;" src="./img/DX-LAB.jpg" alt=""></div>
+                <div><img style="width: 1200px; margin-bottom: 0px;" src="./img/12.png" alt=""></div>
+                <div><img style="width: 1200px; margin-bottom: 50px;" src="./img/2.png" alt=""></div>
 
             <c:if test="${sessionScope.account != null}">
-                <div class="content2">
+<!--                <div class="content2">
                     <div class="content2_item-left">
                         <ul>    
                             <li class="content2_item_li">
@@ -141,7 +142,7 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div>-->
             </c:if>
 
         </div>

@@ -9,24 +9,24 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Notifications</title>
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include>
         <c:if test="${createNotification ne null}">
             <div class="container mt-8">
                 <h1 class="font-weight-semi-bold text-uppercase mb-3 text-center">
-                    Create a new Notification
+                    Create a new Announcements
                 </h1>
                 <form action="createNotification" method="get" id="createNotification" enctype="multipart/form-data">
                     <input type="hidden" name="service" value="sendInsertDetail" /> 
                     <div class="mb-3">
-                        <label for="send_id" class="form-label">Mentor ID</label>
-                        <input type="text" class="form-control" id="send_id" name="send_id" value="${sessionScope.account.user_id}" readonly required>
+                        <!--<label for="send_id" class="form-label">Mentor ID</label>-->
+                        <input type="hidden" class="form-control" id="send_id" name="send_id" value="${sessionScope.account.user_id}" readonly required>
                     </div>
                     <div class="mb-3">
-                        <label for="project_code" class="form-label">Project Code</label>
-                        <input type="text" class="form-control" id="project_code" name="project_code" value="${projectCode}" readonly required>
+                        <!--<label for="project_code" class="form-label">Project Code</label>-->
+                        <input type="hidden" class="form-control" id="project_code" name="project_code" value="${projectCode}" readonly required>
                     </div>
                     <div class="mb-3">
                         <label for="position_code" class="form-label">Position Code</label>
@@ -53,10 +53,10 @@
                         <label for="date" class="form-label">Date</label>
                         <input type="date" class="form-control" id="date" name="date" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="published_date" class="form-label">Publish Date</label>
-                        <input type="date" class="form-control" id="published_date" name="published_date" required>
-                    </div>
+                    <!--                    <div class="mb-3">
+                                            <label for="published_date" class="form-label">Publish Date</label>
+                                            <input type="date" class="form-control" id="published_date" name="published_date" required>
+                                        </div>-->
                     <div class="mb-3">
                         <label for="message" class="form-label">Message</label>
                         <textarea type="text" class="form-control" id="message" name="message" placeholder="Write something..." ></textarea>

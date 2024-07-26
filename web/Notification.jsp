@@ -17,17 +17,22 @@
         <c:if test="${sessionScope.account.role_id == 4}">
             <div class="container">
                 <h1 class="font-weight-semi-bold text-uppercase mb-3 text-center">
-                    Notifications Manage
+                    Announcements Manage
                 </h1>
 
                 <!-- Create a new notification -->
                 <div class="row">
                     <a class="btn btn-block btn-primary my-3 py-3 text-center" 
-                       href="notificationControl?service=requestInsert&projectCode=${projectCode}"
-                       >
-                        Create a new Notifications
+                       href="notificationControl?service=requestInsert&projectCode=${projectCode}">
+                        Create a new Announcement
                     </a>
                 </div>
+                <!--//thông bái insert thành công-->
+                <c:if test="${InsertDone ne null}">
+                    <h4 class="font-weight-semi-bold  mb-3 text-danger">
+                        ${InsertDone}
+                    </h4>
+                </c:if>
                 <!--view list Notification-->
                 <c:if test="${not empty allNotification}">
                     <div class="col-lg-12 table-responsive mb-5">
@@ -63,6 +68,7 @@
                                             <a href="${noti.link}" >${noti.link}</a>
                                         </td>
                                         <td class="align-middle">
+                                            <a href="updateNotification?service=requestUpdate&notificationId=${noti.notification_id}&projectCode=${noti.project_code}">Update</a>
                                             <a href="notificationControl?service=deleteNotification&notificationId=${noti.notification_id}&projectCode=${noti.project_code}" onclick="return confirmDelete('${noti.notification_id}')">Delete</a>
                                         </td>
                                     </tr>
@@ -77,12 +83,7 @@
                     </script>
                 </c:if>
 
-                <!--//thông bái insert thành công-->
-                <c:if test="${InsertDone ne null}">
-                    <h3 class="font-weight-semi-bold  mb-3 text-center">
-                        ${InsertDone}
-                    </h3>
-                </c:if>
+
             </c:if>
     </body>
 </html>

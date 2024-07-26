@@ -33,9 +33,38 @@ public class ViewRecruiment extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        List<ProjectWithPositions> projects = (new HRDAO()).getAllProjectsWithPositions();
-        request.setAttribute("showSearchProject", "Yes");
+        response.setContentType("text/html;charset=UTF-8");
+
+        // Lấy index trang từ request
+        String indexPage = request.getParameter("index");
+        int index = 1; // Mặc định là trang đầu tiên
+        try {
+            if (indexPage != null) {
+                index = Integer.parseInt(indexPage);
+            }
+        } catch (NumberFormatException e) {
+            index = 1; // Xử lý ngoại lệ khi indexPage không phải số
+        }
+
+        // Lấy danh sách dự án từ DAO
+        HRDAO hrDAO = new HRDAO();
+        List<ProjectWithPositions> projects = hrDAO.pagingProjects(index);
+
+        // Tính toán số trang cuối cùng
+        int totalProjects = hrDAO.getTotalProjects();
+        int endPage = totalProjects / 4;
+        if (totalProjects % 4 != 0) {
+            endPage++;
+        }
+
+        // Đặt các thuộc tính cần thiết vào request để hiển thị trên JSP
         request.setAttribute("allProjects", projects);
+
+        request.setAttribute("tag", index);
+        request.setAttribute("showSearchProject", "Yes");
+        request.setAttribute("endPage", endPage);
+
+        // Chuyển tiếp request đến Recruitment.jsp để hiển thị
         request.getRequestDispatcher("Recruiment.jsp").forward(request, response);
 
     }

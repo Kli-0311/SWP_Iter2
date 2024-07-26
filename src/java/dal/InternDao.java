@@ -25,6 +25,8 @@ import models.Notifications;
 import models.ProjectAttendanceByIntern;
 import models.Projects;
 import models.Reports;
+import models.ViewGradeByIntern;
+import models.ViewGradeByNameIntern;
 
 /**
  *
@@ -834,6 +836,77 @@ public class InternDao {
 
         }
         return 0;
+    }
+    
+    // hUYỀN  cho intern xem điểm của minh
+    public List<ViewGradeByIntern> getGradeByIntern(String userId) {
+    List<ViewGradeByIntern> list = new ArrayList<>();
+        String query = "SELECT i.intern_id,a.full_name ,e.type,e.attitude_score,e.soft_skills_score,e.technical_skills_score,e.total_score,e.comment,p.project_name,pos.position_name\n"
+                + "FROM  [dbo].[Interns] i\n"
+                + "JOIN [dbo].[Evaluations] e ON i.intern_id = e.intern_id\n"
+                + "JOIN [dbo].[Projects] p ON i.project_code = p.project_code\n"
+                + "JOIN [dbo].[Positions] pos ON i.position_code = pos.position_code AND i.project_code = pos.project_code\n"
+                + "JOIN [dbo].[Account] a ON i.mentor_id = a.user_id\n"
+                + "WHERE i.user_id = ? \n"
+                + "ORDER BY i.intern_id;";
+        
+        
+        
+        try {
+            
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
+           while (rs.next()) {
+                list.add(new ViewGradeByIntern(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getInt(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getString(10)
+                ));
+            }
+           
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging
+        }
+        return list;
+    
+    }
+    // HUYỀN cho name của intern 
+    public List<ViewGradeByNameIntern> getNameGradeByIntern(String userId) {
+        List<ViewGradeByNameIntern> name = new ArrayList<>();
+        String query = "SELECT i.intern_id,a.full_name AS intern_name\n"
+                + "FROM [Project1].[dbo].[Interns] i\n"
+                + "JOIN [Project1].[dbo].[Account] a ON i.user_id = a.user_id\n"
+                + "WHERE i.user_id = ? ;";
+        
+        
+        
+        try {
+            
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
+           while (rs.next()) {
+                name.add(new ViewGradeByNameIntern(                       
+                        rs.getString(2)
+                        
+                ));
+            }
+           
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging
+        }
+        return name;
+    
     }
 
 

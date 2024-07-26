@@ -12,8 +12,8 @@ import jakarta.mail.internet.*;
 public class SendEmail extends HttpServlet {
 
     public static boolean sendEmail(String to, String subject, String content) {
-        final String username = "nguyenxuanchienbkn@gmail.com"; 
-        final String password = "jdyr rwps uuzj aeqf";
+        final String username = "linhtkhe176489@fpt.edu.vn";
+        final String password = "eqdl tijc fzec mduv";
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -45,21 +45,35 @@ public class SendEmail extends HttpServlet {
     }
 
     @Override
-     protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         String[] selectedUsers = request.getParameterValues("selectedUsers");
         List<String> successList = new ArrayList<>();
         List<String> failList = new ArrayList<>();
 
         if (selectedUsers != null && selectedUsers.length > 0) {
-            String subject = "Your DXLab website login account";
-            
+            String subject = "Thông báo về tài khoản của bạn trên hệ thống DXLab";
+
             for (String username : selectedUsers) {
                 String content = "<html><body>"
-                                + "<p>Username: " + username + "</p>"
-                                + "<p>Password: Admin@123</p>"
-                                + "</body></html>";
-                
+                        + "Chúng tôi vui mừng thông báo rằng tài khoản của bạn đã được tạo thành công trên hệ thống của chúng tôi. Dưới đây là thông tin chi tiết về tài khoản của bạn:<br><br>"
+                        + "Email: " + username + "<br>"
+                        + "Mật khẩu: Admin@123<br><br>" + "Bạn vui lòng truy cập vào hệ thống và đăng nhập bằng thông tin trên. Sau khi đăng nhập lần đầu, bạn sẽ được yêu cầu đổi mật khẩu để bảo mật tài khoản của mình.<br><br>"
+                        + "Hướng dẫn đăng nhập:<br>"
+                        + "1. Truy cập vào trang đăng nhập của hệ thống:<br>"
+                        + "2. Nhập tên đăng nhập và mật khẩu tạm thời.<br>"
+                        + "3. Thay đổi mật khẩu theo yêu cầu của hệ thống.<br><br>"
+                        + "Nếu bạn gặp bất kỳ khó khăn nào trong quá trình đăng nhập hoặc cần hỗ trợ thêm, vui lòng liên hệ với chúng tôi qua email hoặc số điện thoại dưới đây:<br>"
+                        + "Email hỗ trợ: dxlabfpt@gmail.com<br>"
+                        + "Số điện thoại hỗ trợ: 0868 686868<br><br>"
+                        + "Chúng tôi rất mong được hợp tác và chúc bạn nhiều thành công với tài khoản mới trên hệ thống của chúng tôi.<br><br>"
+                        + "Trân trọng,<br>"
+                        + "DX Lab, FPT University Hanoi<br>"
+                        + "</body></html>";
+
                 boolean isSent = sendEmail(username, subject, content);
                 if (isSent) {
                     successList.add(username);
@@ -71,8 +85,6 @@ public class SendEmail extends HttpServlet {
 
         request.setAttribute("successList", successList);
         request.setAttribute("failList", failList);
-        
-        // Chuyển hướng trở lại trang danh sách tài khoản
         request.getRequestDispatcher("viewAccount").forward(request, response);
     }
 

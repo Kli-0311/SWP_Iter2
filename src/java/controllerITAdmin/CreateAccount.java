@@ -25,7 +25,7 @@ public class CreateAccount extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         // Setting response content type to text/html with UTF-8 encoding
         response.setContentType("text/html;charset=UTF-8");
 
@@ -108,10 +108,32 @@ public class CreateAccount extends HttpServlet {
                 return;
             }
 
-            // Checking if the username already exists
+//            // Checking if the username already exists
+//            Account existingAccount = adminDao.getAccountByUsername(username);
+//            if (existingAccount != null) {
+//                request.setAttribute("messErrorUsername", "This username is already registered.");
+//                request.getRequestDispatcher("createAccount.jsp").forward(request, response);
+//            } else {
+//                // Adding the new account to the database
+//                adminDao.createAccountUser(user_id, username, role_id, fullName, dob, gender, phoneNumber, avatar, password);
+//                request.setAttribute("successMessage", "Account created successfully");
+//                request.getRequestDispatcher("createAccount.jsp").forward(request, response);
+//            }
+            
+                        // Checking if the username already exists
             Account existingAccount = adminDao.getAccountByUsername(username);
-            if (existingAccount != null) {
-                request.setAttribute("messErrorUsername", "This username is already registered.");
+
+            // Checking if the phone number already exists
+            boolean isPhoneExists = adminDao.isPhoneNumberExists(phoneNumber);
+
+            if (existingAccount != null || isPhoneExists) {
+                // Handle error cases
+                if (existingAccount != null) {
+                    request.setAttribute("messErrorUsername", "This username is already registered.");
+                }
+                if (isPhoneExists) {
+                    request.setAttribute("messErrorPhone", "This phone number is already registered.");
+                }
                 request.getRequestDispatcher("createAccount.jsp").forward(request, response);
             } else {
                 // Adding the new account to the database
@@ -119,6 +141,8 @@ public class CreateAccount extends HttpServlet {
                 request.setAttribute("successMessage", "Account created successfully");
                 request.getRequestDispatcher("createAccount.jsp").forward(request, response);
             }
+            
+            
         } catch (Exception e) {
             // Handling any exceptions that occur during account creation
             request.setAttribute("successMessage", "Account created unsuccessfully");

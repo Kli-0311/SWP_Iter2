@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controllerIntern;
 
 import dal.AdminDAO;
@@ -28,21 +24,8 @@ import java.util.Map;
 import models.Account;
 import models.InternSchedule;
 
-/**
- *
- * @author ADMIN
- */
 public class Attendance extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -51,7 +34,7 @@ public class Attendance extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     @Override
@@ -63,7 +46,7 @@ public class Attendance extends HttpServlet {
             response.sendRedirect("login.jsp");
             return;
         }
-        
+
         String wifiIPAddress = (String) session.getAttribute("wifiIPAddress");
         InternDao dao = new InternDao();
         AdminDAO admindao = new AdminDAO();
@@ -122,7 +105,9 @@ public class Attendance extends HttpServlet {
         request.setAttribute("page", page);
         request.setAttribute("totalPages", totalPages);
 
-        if (wifiIPAddress == null || !wifiIPAddress.equals(admindao.getLatestIPAddress())) {
+        String startIp = admindao.getLatestStartIPAddress();
+        String endIp = admindao.getLatestEndIPAddress();
+        if (wifiIPAddress == null || !isIpInRange(wifiIPAddress, startIp, endIp)) {
             request.setAttribute("message", "You cannot check-in because you are not connected to the school's WiFi.");
             request.getRequestDispatcher("AttendanceList.jsp").forward(request, response);
             return;
@@ -145,8 +130,8 @@ public class Attendance extends HttpServlet {
         }
 
         LocalDateTime now = LocalDateTime.now();
-        LocalTime checkInStartTime = LocalTime.of(14, 0);
-        LocalTime checkInEndTime = LocalTime.of(15, 30);
+        LocalTime checkInStartTime = LocalTime.of(10, 0);
+        LocalTime checkInEndTime = LocalTime.of(17, 30);
 
         String status;
         if (now.toLocalTime().isBefore(checkInEndTime) && now.toLocalTime().isAfter(checkInStartTime)) {
@@ -164,7 +149,28 @@ public class Attendance extends HttpServlet {
         dao.insertAttendance(intern_id, Date.valueOf(today), status);
         request.setAttribute("message", "Check-in successful. Your status: " + status);
         request.getRequestDispatcher("AttendanceList.jsp").forward(request, response);
+    }
 
+    private boolean isIpInRange(String ip, String startIp, String endIp) {
+        int[] ipAddr = parseIp(ip);
+        int[] startIpAddr = parseIp(startIp);
+        int[] endIpAddr = parseIp(endIp);
+
+        for (int i = 0; i < 4; i++) {
+            if (ipAddr[i] < startIpAddr[i] || ipAddr[i] > endIpAddr[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private int[] parseIp(String ip) {
+        String[] parts = ip.split("\\.");
+        int[] ipAddr = new int[4];
+        for (int i = 0; i < 4; i++) {
+            ipAddr[i] = Integer.parseInt(parts[i]);
+        }
+        return ipAddr;
     }
 
     @Override

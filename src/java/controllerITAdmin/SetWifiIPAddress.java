@@ -46,7 +46,7 @@ public class SetWifiIPAddress extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
+         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
 
         if (acc == null) {
@@ -55,8 +55,10 @@ public class SetWifiIPAddress extends HttpServlet {
         }
 
         AdminDAO adminDao = new AdminDAO();
-        String latestIpAddress = adminDao.getLatestIPAddress();
-        request.setAttribute("latestIpAddress", latestIpAddress);
+        String latestStartIpAddress = adminDao.getLatestStartIPAddress();
+        String latestEndIpAddress = adminDao.getLatestEndIPAddress();
+        request.setAttribute("latestStartIpAddress", latestStartIpAddress);
+        request.setAttribute("latestEndIpAddress", latestEndIpAddress);
 
         request.getRequestDispatcher("IPAddress.jsp").forward(request, response);
     }
@@ -72,7 +74,7 @@ public class SetWifiIPAddress extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
+         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
 
         if (acc == null) {
@@ -80,15 +82,18 @@ public class SetWifiIPAddress extends HttpServlet {
             return;
         }
 
-        String wifiIpAddress = request.getParameter("IpAddress");
+        String startIpAddress = request.getParameter("startIpAddress");
+        String endIpAddress = request.getParameter("endIpAddress");
         String userId = acc.getUser_id();
 
         AdminDAO adminDao = new AdminDAO();
-        adminDao.insertIPAddress(wifiIpAddress, userId);
+        adminDao.insertIPAddressRange(userId, startIpAddress, endIpAddress);
 
-        String latestIpAddress = adminDao.getLatestIPAddress();
-        request.setAttribute("latestIpAddress", latestIpAddress);
-        request.setAttribute("message", "WiFi IP Address set successfully: " + wifiIpAddress);
+        String latestStartIpAddress = adminDao.getLatestStartIPAddress();
+        String latestEndIpAddress = adminDao.getLatestEndIPAddress();
+        request.setAttribute("latestStartIpAddress", latestStartIpAddress);
+        request.setAttribute("latestEndIpAddress", latestEndIpAddress);
+        request.setAttribute("message", "WiFi IP Address range set successfully: " + startIpAddress + " - " + endIpAddress);
         request.getRequestDispatcher("IPAddress.jsp").forward(request, response);
     }
 

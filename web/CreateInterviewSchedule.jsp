@@ -21,8 +21,8 @@
                 <form action="createInterviewSchedule" method="get" id="createInterviewSchedule" enctype="multipart/form-data">
                     <input type="hidden" name="service" value="sendInsertDetail" />
                     <div class="mb-3">
-                        <label for="send_id" class="form-label">Send ID</label>
-                        <input type="text" class="form-control" id="send_id" name="send_id" value="${sessionScope.account.user_id}" readonly required>
+                        <!--<label for="send_id" class="form-label">Send ID</label>-->
+                        <input type="hidden" class="form-control" id="send_id" name="send_id" value="${sessionScope.account.user_id}" readonly required>
                     </div>
                     <div class="mb-3">
                         <label for="mentor_id" class="form-label">Mentor ID</label>

@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Set WiFi IP Address</title>
+        <title>Set WiFi IP Address Range</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -65,24 +65,30 @@
     <body>
         <jsp:include page="header.jsp"></jsp:include>
 
-            <div class="container1">
-                <h2>Set WiFi IP Address</h2>
+        <div class="container1">
+            <h2>Set WiFi IP Address Range</h2>
 
-            <%-- Display message if it exists --%>
             <div class="message">
                 ${message}
             </div>
 
-            <%-- Display current IP address --%>
-            <div class="message2">Current IP Address: ${latestIpAddress != null ? latestIpAddress : "Not set yet"}</div>
+            <div class="message2">
+                Current IP Range: 
+                ${latestStartIpAddress} - ${latestEndIpAddress}
+                
+            </div>
 
             <form action="setWifiIPAddress" method="post">
                 <div class="form-group">
-                    <label for="IpAddress">WiFi IP Address:</label>
-                    <input type="text" id="IpAddress" name="IpAddress" required>
+                    <label for="startIpAddress">Start IP Address:</label>
+                    <input type="text" id="startIpAddress" name="startIpAddress" required>
+                </div>
+                <div class="form-group">
+                    <label for="endIpAddress">End IP Address:</label>
+                    <input type="text" id="endIpAddress" name="endIpAddress" required>
                 </div>
                 <br>
-                <input type="submit" value="Set IP Address">
+                <input type="submit" value="Set IP Address Range">
             </form>
             <a href="home.jsp">Back to home</a>
         </div>

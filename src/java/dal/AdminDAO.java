@@ -409,7 +409,7 @@ public class AdminDAO {
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-           ps.setDate(1, (java.sql.Date) startDate);
+            ps.setDate(1, (java.sql.Date) startDate);
             ps.setDate(2, (java.sql.Date) endDate);
             ps.setString(3, user_id);
             int rowsAffected = ps.executeUpdate();
@@ -493,30 +493,42 @@ public class AdminDAO {
         return list;
     }
 
-    public void insertIPAddress(String ipAddress, String userId) {
-        String query = "INSERT INTO WifiIPAddress (ipAddress, user_id, created_at) VALUES (?, ?, GETDATE())";
+    public void insertIPAddressRange(String userId, String startIpAddress, String endIpAddress) {
+        String query = "INSERT INTO WifiIPAddress (user_id, created_at, startIpAddress, endIpAddress) VALUES (?, GETDATE(), ?, ?)";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, ipAddress);
-            ps.setString(2, userId);
+            ps.setString(1, userId);
+            ps.setString(2, startIpAddress);
+            ps.setString(3, endIpAddress);
             ps.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
-    public String getLatestIPAddress() {
-        String query = "SELECT TOP 1 ipAddress FROM WifiIPAddress ORDER BY created_at DESC";
+    public String getLatestStartIPAddress() {
+        String query = "SELECT TOP 1 startIpAddress FROM WifiIPAddress ORDER BY created_at DESC";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getString("ipAddress");
+                return rs.getString("startIpAddress");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+        }
+        return null;
+    }
+    public String getLatestEndIPAddress() {
+        String query = "SELECT TOP 1 endIpAddress FROM WifiIPAddress ORDER BY created_at DESC";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("endIpAddress");
+            }
+        } catch (Exception e) {
         }
         return null;
     }

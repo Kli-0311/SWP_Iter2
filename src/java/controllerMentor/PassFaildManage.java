@@ -139,7 +139,7 @@ public class PassFaildManage extends HttpServlet {
             String status = request.getParameter("status");
             String fullname = request.getParameter("fullname");
             String email = request.getParameter("email");
-            edao.updateStatus(status, userId);
+            edao.updateStatus(status, userId, projectCode);
 
             String to = email;  // email người nhận
             final String username = "nvdong0902@gmail.com"; // email người gửi

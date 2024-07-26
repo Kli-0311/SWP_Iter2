@@ -241,9 +241,9 @@ public class MentorDAO {
     public List<Interns> getInternIdbyProject(String projectCode) {
         List<Interns> list = new ArrayList<>();
         String query = "SELECT  *\n"
-                + "                FROM Interns i\n"
-                + "                JOIN Projects p ON p.project_code = i.project_code\n"
-                + "                WHERE p.project_code LIKE ?";
+                + "FROM Interns i\n"
+                + "JOIN Projects p ON p.project_code = i.project_code\n"
+                + "WHERE p.project_code LIKE ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);

@@ -3,9 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controllerITAdmin;
+package controllerIntern;
 
-import dal.AdminDAO;
+import dal.InternDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,13 +13,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import models.Account;
+import models.ViewGradeByIntern;
+import models.ViewGradeByNameIntern;
 
 /**
  *
- * @author ADMIN
+ * @author ADM
  */
-public class ViewSetIPAddress extends HttpServlet {
+public class ViewGradeByInterns extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,18 +34,18 @@ public class ViewSetIPAddress extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("account");
-        if (acc == null) {
-            response.sendRedirect("login.jsp");
-            return;
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ViewGradeByInterns</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ViewGradeByInterns at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
-        AdminDAO adminDao = new AdminDAO();
-        String latestStartIpAddress = adminDao.getLatestStartIPAddress();
-        String latestEndIpAddress = adminDao.getLatestEndIPAddress();
-        request.setAttribute("latestStartIpAddress", latestStartIpAddress);
-        request.setAttribute("latestEndIpAddress", latestEndIpAddress);
-        request.getRequestDispatcher("IPAddress.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -56,7 +59,22 @@ public class ViewSetIPAddress extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        String userId = account.getUser_id();
+
+        InternDao dao = new InternDao();
+        List<ViewGradeByIntern> list = dao.getGradeByIntern(userId);
+        List<ViewGradeByNameIntern> nameintern= dao.getNameGradeByIntern(userId);
+        // Set the grades list as a request attribute
+        request.setAttribute("evaluations", list);
+        if (nameintern != null && !nameintern.isEmpty()) {
+            // Chỉ lấy phần tử đầu tiên nếu có
+            ViewGradeByNameIntern firstIntern = nameintern.get(0);
+            request.setAttribute("nameintern", firstIntern);
+}
+            // Forward the request to the JSP page for displaying the grades
+            request.getRequestDispatcher("ViewGradeByIntern.jsp").forward(request, response);
     } 
 
     /** 

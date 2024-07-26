@@ -17,7 +17,6 @@
         <div class="row">
             <div class="col-md-12">
                 <h1 class="mb-4">List User Accounts</h1>
-                <button type="submit" class="btn btn-secondary">Send Mail</button>
                 <form class="form-inline mb-3 justify-content-end" action="searchAccount" method="get">
                     <div class="input-group">
                         <input class="form-control" type="search" placeholder="Search username" aria-label="Search" name="username">
@@ -26,17 +25,33 @@
                         </div>
                     </div>
                 </form>
+                <!-- Hiển thị thông báo kết quả gửi email -->
+                <c:if test="${not empty successList or not empty failList}">
+                    <div class="mt-3">
+                        <c:if test="${not empty successList}">
+                            <div class="alert alert-success">
+                                Email sent successfully to: ${successList}
+                            </div>
+                        </c:if>
+                        <c:if test="${not empty failList}">
+                            <div class="alert alert-danger">
+                                Failed to send email to: ${failList}
+                            </div>
+                        </c:if>
+                    </div>
+                </c:if>
 
                 <form action="sendEmail" method="post">
+                     <button type="submit" class="btn btn-secondary">Send Mail</button>
                     <div class="search-results">
                         <table class="table table-bordered table-hover">
                             <thead class="thead-dark">
                                 <tr>
                                     <th>Select</th>
-                                    <th>User ID</th>
-                                    <th>Username</th>
-                                    <th>Active</th>
-                                    <th>Edit</th>
+                                    <th>Roll number</th>
+                                    <th>Email</th>
+                                    <th>Activate</th>
+                                    <th>Setting</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -52,8 +67,7 @@
                                                 ${account.is_active == 1 ? '&#10003;' : '&#10005;'}
                                             </span>
                                         </td>
-                                        <td>
-                                            <form action="inactiveAccount.jsp" method="post" style="display:inline;">
+                                        <td><form action="inactiveAccount.jsp" method="post" style="display:inline;">
                                                 <input type="hidden" name="user_id" value="${account.user_id}">
                                                 <input type="hidden" name="username" value="${account.username}">
                                                 <input type="hidden" name="password" value="${account.password}">
@@ -66,24 +80,10 @@
                             </tbody>
                         </table>
                     </div>
-                    
+                   
                 </form>
                 
-               
-                <c:if test="${not empty successList or not empty failList}">
-                    <div class="mt-3">
-                        <c:if test="${not empty successList}">
-                            <div class="alert alert-success">
-                                Email sent successfully to: ${successList}
-                            </div>
-                        </c:if>
-                        <c:if test="${not empty failList}">
-                            <div class="alert alert-danger">
-                                Failed to send email to: ${failList}
-                            </div>
-                        </c:if>
-                    </div>
-                </c:if>
+                
             </div>
         </div>
     </div>

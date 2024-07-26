@@ -19,7 +19,7 @@
             }
             .container {
                 width: 80%;
-                margin: 20px auto;
+                margin: 70px auto;
                 background-color: #fff;
                 padding: 20px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -81,6 +81,9 @@
                         <option value="${project.projectCode}" ${selectedProject != null && selectedProject.equals(project.projectCode) ? 'selected' : ''}>${project.projectName}</option>
                     </c:forEach>
                 </select>
+
+                <a style="margin-left: 830px" href="markAttendance?selectedProject=<c:out value="${selectedProject != null ? selectedProject : 'all'}"/>">Mark Attendance</a>
+
             </div>
 
             <table>

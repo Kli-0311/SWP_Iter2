@@ -174,7 +174,7 @@
                             <div class="product-listing">
                                 <div class="content">
                                     <h3 class="name" style="font-size: 40px">${message.title}</h3>
-                                    <p class="info">Mentor ID: ${message.senderId}</p>
+                                    <p class="info">Mentor Name: ${mentorName.full_name}</p>
                                     <p class="info">Start Date: ${message.date_start}</p>
                                     <p class="info">End Date: ${message.date_end}</p>
                                     <p class="info">JD: ${message.message}</p>

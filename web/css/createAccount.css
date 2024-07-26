@@ -1,0 +1,147 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jun 19, 2024, 7:11:04 PM
+    Author     : khanh
+*/
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+}
+.signup-container {
+    width: 500px;
+    padding: 20px;
+    background-color: white;
+    margin: 0 auto;
+    margin-top: 70px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    border-radius: 20px;
+}
+.signup-container h2 {
+    font-size: 40px;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+.signup-container input[type="text"],
+.signup-container input[type="number"],
+.signup-container input[type="password"],
+.signup-container input[type="date"],
+.signup-container input[type="file"],
+.signup-container select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 20px;
+}
+.signup-container input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #202942;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    height: 40px;
+    margin-top: 20px;
+}
+.signup-container input[type="submit"]:hover {
+    background-color: rgb(80,80,200);
+}
+.signup-container .gender {
+    margin: 10px 0;
+}
+.signup-container .links {
+    text-align: center;
+    margin-top: 20px;
+}
+.signup-container .links a {
+    color: #202942;
+    text-decoration: none;
+}
+
+.signup-container .links a:hover{
+    color: rgb(80,80,130);
+}
+
+.eye-icon {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 50%; /* Điều chỉnh vị trí icon mắt để nằm giữa chiều cao của input */
+    transform: translateY(-50%);
+    z-index: 1; /* Đặt z-index để nút "mắt" hiển thị trên trường mật khẩu */
+    color: #ccc; /* Màu của biểu tượng mắt */
+}
+
+.input-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.eye-icon {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 50%; /* Điều chỉnh vị trí icon mắt để nằm giữa chiều cao của input */
+    transform: translateY(-50%);
+    z-index: 1; /* Đặt z-index để nút "mắt" hiển thị trên trường mật khẩu */
+    color: #ccc; /* Màu của biểu tượng mắt */
+}
+
+.input-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+/* CSS for validation icons */
+.validation-icon {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none; /* Ẩn biểu tượng ban đầu */
+}
+
+.valid-icon {
+    color: green; /* Màu của biểu tượng khi hợp lệ */
+}
+
+.invalid-icon {
+    color: red; /* Màu của biểu tượng khi không hợp lệ */
+}
+
+/* Additional styles for eye icon */
+.eye-icon {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 50%; /* Điều chỉnh vị trí icon mắt để nằm giữa chiều cao của input */
+    transform: translateY(-50%);
+    z-index: 1; /* Đặt z-index để nút "mắt" hiển thị trên trường mật khẩu */
+    color: #ccc; /* Màu của biểu tượng mắt */
+}
+
+.input-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.success-message {
+    color: green; /* Màu chữ là màu xanh lá cây */
+    font-weight: bold; /* Đậm chữ */
+    /* Thêm các thuộc tính khác tùy ý để làm nổi bật */
+}
+
+.links a {
+    color: red; /* Đổi màu chữ sang đỏ */
+}
+
+
+

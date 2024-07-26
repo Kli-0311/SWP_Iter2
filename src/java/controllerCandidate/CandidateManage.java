@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.time.LocalDate;
 import java.util.List;
 import models.Account;
 import models.CandidateApply;
@@ -51,27 +52,34 @@ public class CandidateManage extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        LocalDate currentDate = LocalDate.now();
+        CandidateDAO candidateDAO = new CandidateDAO();
+
         String service = request.getParameter("service");
-        request.setAttribute("CandidateManage", "Yes");
+
         if (service.equals("applyProject")) {
             String projectCode = request.getParameter("projectCode");
             String positionCode = request.getParameter("positionCode");
 
-            // Lấy đối tượng account từ session
+            // Get the account from session
             Account account = (Account) request.getSession().getAttribute("account");
-            String userId = account.getUser_id(); // assuming Account has a getUserId() method
+            String userId = account.getUser_id();
 
-            // Save application details to database
-            CandidateDAO applicationDAO = new CandidateDAO();
-            applicationDAO.saveApplication(userId, projectCode, positionCode);
+            // Check if the candidate has already applied
+            if (candidateDAO.hasAlreadyApplied(userId, projectCode)) {
+                request.setAttribute("errorMessage", "You have already applied for this project.");
+                request.getRequestDispatcher("detailProject").forward(request, response);
+                return;
+            }
 
-            // Redirect or forward to a confirmation page
+            // Save application details to the database
+            candidateDAO.saveApplication(userId, projectCode, positionCode);
             request.getRequestDispatcher("home").forward(request, response);
         }
 //        if(service.equals("viewCandidate")){
@@ -81,13 +89,12 @@ public class CandidateManage extends HttpServlet {
 //            request.setAttribute("viewCandidate", viewCandidate);
 //            request.getRequestDispatcher("DetailProject.jsp").forward(request, response);
 //        }
-        if(service.equals("viewCandidateAll")){
+        if (service.equals("viewCandidateAll")) {
             String projectCode = request.getParameter("projectCode");
             List<CandidateApply> listCandidate = (new CandidateDAO()).getAllCandidateApplyByProjectCode(projectCode);
             request.setAttribute("listCandidate", listCandidate);
             request.getRequestDispatcher("ViewCandidateApply.jsp").forward(request, response);
         }
-
     }
 
     @Override

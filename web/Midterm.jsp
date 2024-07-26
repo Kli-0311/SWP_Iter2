@@ -52,14 +52,15 @@
             <div class="container">
                 <h3 class="text-center">Grade report for ${fullName}</h3>
                 <c:if test="${done ne null}">
-                    <h3 class="font-weight-semi-bold text-uppercase mb-3 text-center">
+                    <h5 class="font-weight-semi-bold text-danger mb-3 text-center">
                         ${done}
-                    </h3>
+                    </h5>
                 </c:if>
                 <c:choose>
                     <c:when test="${evaluation == null}">
                         <form action="evaluateManage" method="get">
                             <input type="hidden" name="service" value="InsertMidTerm"/>
+                            <input type="hidden" name="fullName" value="${fullName}"/>
                             <input type="hidden" name="internId" value="${internId}"/>
                             <input type="hidden" name="mentorid" value="${sessionScope.account.user_id}"/>
                             <input type="hidden" name="type" value="Midterm"/>
@@ -104,7 +105,9 @@
                     </c:when>
                     <c:otherwise>
                         <form action="evaluateManage" method="get">
-                            <input type="hidden" name="service" value="Update"/>
+                            <input type="hidden" name="service" value="UpdateMidterm"/>
+                            <input type="hidden" name="fullName" value="${fullName}"/>
+
                             <input type="hidden" name="evaluationId" value="${evaluation.evaluation_id}"/>
                             <input type="hidden" name="projectCode" value="${evaluation.projectCode}"/>
                             <input type="hidden" name="internId" value="${evaluation.internId}"/>
@@ -154,7 +157,7 @@
                 const midterm1 = parseFloat(document.getElementById('attitude_score').value) || 0;
                 const midterm2 = parseFloat(document.getElementById('soft_skills_score').value) || 0;
                 const midterm3 = parseFloat(document.getElementById('technical_skills_score').value) || 0;
-                const midtermTotal = (midterm1 + midterm2 + midterm3);
+                const midtermTotal = (midterm1 * 0.4 + midterm2 * 0.3 + midterm3 * 0.3);
                 document.getElementById('total').value = midtermTotal.toFixed(2);
 
             }

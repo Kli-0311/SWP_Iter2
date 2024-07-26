@@ -545,6 +545,23 @@ public class EvaluationDAO extends DBContext {
         }
         return 0;
     }
+    
+    public int updateStatus(String status, String userId, String projectCode) {
+        String query = "UPDATE [dbo].[Applications]\n"
+                + "   SET [status] = ?\n"
+                + " WHERE [applicant_id] = ? and [project_code] = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, status);
+            ps.setString(2, userId);
+            ps.setString(3, projectCode);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 //
 //    public static void main(String[] args) {
 //        EvaluationDAO dao = new EvaluationDAO();

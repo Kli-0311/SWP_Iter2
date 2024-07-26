@@ -79,13 +79,19 @@ public class LoginControl extends HttpServlet {
 
     public static String getCurrentWiFiIPAddress(HttpServletRequest request) {
         try {
+            // lấy danh sách tất cả các NetworkInterface trên máy tính
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            // duyệt qua từng NetworkInterface
             while (interfaces.hasMoreElements()) {
                 NetworkInterface networkInterface = interfaces.nextElement();
+                // lấy danh sách tất cả các InetAddress gắn với NetworkInterface hiện tại
                 Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
+                // duyệt qua từng InetAddress
                 while (addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
+                    // kiểm tra nếu địa chỉ là loại IPv4 và không phải địa chỉ loopback (127.0.0.1)
                     if (addr instanceof Inet4Address && !addr.isLoopbackAddress()) {
+                        // trả về địa chỉ IP
                         String ipAddress = addr.getHostAddress();
                         return ipAddress;
                     }

@@ -107,7 +107,7 @@ public class UpdateProfileFirstTime extends HttpServlet {
                 }
             }
 
-            dao.updateAccount(userName, password, fullName, dob, gender, phoneNumber, imgFileName, specialization);
+            dao.updateAccount(userName, password,dob, gender, phoneNumber, imgFileName, specialization);
             Account updatedAccount = (Account) session.getAttribute("account");
             updatedAccount.setFull_name(fullName);
             updatedAccount.setDob(dob);

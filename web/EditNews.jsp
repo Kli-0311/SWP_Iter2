@@ -62,7 +62,7 @@
                         
                         <div class="form-group">
                             <label for="publishedDate">Published Date</label>
-                            <input value="${load.publishedDate}" name="publishedDate" type="date" class="form-control" required>
+                            <input value="${load.publishedDate}" name="publishedDate" type="date" class="form-control" readonly>
                         </div>
                         <div class="form-group">
                             <label for="imageUrl">Image URL</label>
@@ -103,26 +103,14 @@
         var form = document.getElementById('editForm');
 
         form.addEventListener('submit', function(event) {
-            var publishedDate = form.elements['publishedDate'].value;
+            
             var title = form.elements['title'].value;
             var content = form.elements['content'].value;
             
             var errorMessages = [];
             
             // Kiểm tra nếu không có publishedDate
-            if (!publishedDate) {
-                errorMessages.push("Published Date is required.");
-            } else {
-                // Tạo đối tượng Date từ chuỗi publishedDate
-                var selectedDate = new Date(publishedDate);
-                var today = new Date(); // Ngày hôm nay
-
-                // So sánh ngày được chọn và ngày hôm nay
-                if (selectedDate.toISOString().split('T')[0] !== today.toISOString().split('T')[0]) // Chuyển selectedDate thành chuỗi ở định dạng ISO (ví dụ: "2024-06-21T00:00:00.000Z"), sau đó tách chuỗi này bằng ký tự 'T' và lấy phần đầu tiên (ngày) (ví dụ: "2024-06-21").
-                {
-                    errorMessages.push("Published Date must be today.");
-                }
-            }
+            
 
             if (title.length < 25 || title.length > 100) {
                 errorMessages.push("Title must be between 25 and 100 characters.");

@@ -2,25 +2,32 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controllerHR;
+package controllerMentor;
 
-import dal.RecruimentDAO;
-import models.Messages;
+import dal.AdminDAO;
+import dal.InternDao;
+import dal.MentorDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import models.Account;
-import models.Recruitment;
+import models.Attendance;
+import models.InternSchedule;
 
 /**
  *
- * @author admin
+ * @author ADMIN
  */
-public class MentorManage extends HttpServlet {
+public class ViewDetailAttendance extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,44 +41,57 @@ public class MentorManage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String service = request.getParameter("service");
-        request.setAttribute("mentorManage", "Yes");
-        Account acc = (Account) request.getSession().getAttribute("account");
-        String user_id = acc.getUser_id();
-        if (service == null) {
-            service = "listAll";
-        }
-        if (service.equals("listAll")) {
-            List<Recruitment> list = (new RecruimentDAO()).getAllMessagesByHR();
-            request.setAttribute("listRecruitment", list);
-            request.getRequestDispatcher("ViewRecruimentByHR.jsp").forward(request, response);
-        }
-        if (service.equals("detail")) {
-            String messageIdStr = request.getParameter("messageId");
-            String mentorId = request.getParameter("mentorId");
-            Account mentorName = (new RecruimentDAO()).getMentorName(mentorId);
-            int messageId = Integer.parseInt(messageIdStr);
-            Recruitment mess = (new RecruimentDAO()).getMessageById(messageId);
+        String userId = request.getParameter("user_id");
 
-            String messageContent = mess.getMessage().replace("\n", "<br>"); 
-            request.setAttribute("messageContent", messageContent);
-            request.setAttribute("mentorName", mentorName);
-            request.setAttribute("message", mess);
-            request.getRequestDispatcher("ViewRecruimentByHR.jsp").forward(request, response);
-        }
-        if (service.equals("respondMentor")) {
-            String mentorId = request.getParameter("receiverId");
-            String status = request.getParameter("status");
-            int recruitmentId = Integer.parseInt(request.getParameter("message_id"));
-            RecruimentDAO dao = new RecruimentDAO();
-            dao.respondMentor(status, recruitmentId);
-            request.setAttribute("done", "Respond Mentor Id " + mentorId + " Success");
-            List<Recruitment> list = (new RecruimentDAO()).getAllMessagesByHR();
-            request.setAttribute("listRecruitment", list);
-            request.getRequestDispatcher("ViewRecruimentByHR.jsp").forward(request, response);
+        MentorDAO adminDAO = new MentorDAO();
+        InternDao internDAO = new InternDao();
 
+        InternSchedule schedule = adminDAO.getInternSchedule(userId);
+
+        List<LocalDate> dateList = new ArrayList<>();
+        for (LocalDate date = schedule.getStartDate(); !date.isAfter(schedule.getEndDate()); date = date.plusDays(1)) {
+            dateList.add(date);
         }
 
+        Map<LocalDate, String> attendanceRecords = adminDAO.getAttendanceRecords(userId);
+
+        List<List<LocalDate>> weeks = new ArrayList<>();
+        List<LocalDate> week = new ArrayList<>();
+        for (LocalDate date : dateList) {
+            week.add(date);
+            if (date.getDayOfWeek() == DayOfWeek.SUNDAY || date.equals(dateList.get(dateList.size() - 1))) {
+                weeks.add(new ArrayList<>(week));
+                week.clear();
+            }
+        }
+
+        // Calculate total pages (4 weeks per page)
+        int totalPages = (int) Math.ceil((double) weeks.size() / 4);
+
+        // Get current page from request
+        String pageStr = request.getParameter("page");
+        int page = 1;
+        if (pageStr != null) {
+            try {
+                page = Integer.parseInt(pageStr);
+            } catch (NumberFormatException e) {
+                page = 1;
+            }
+        }
+
+        // Get the current 4 weeks' dates
+        List<List<LocalDate>> currentWeeks = new ArrayList<>();
+        int startIdx = (page - 1) * 4;
+        for (int i = startIdx; i < startIdx + 4 && i < weeks.size(); i++) {
+            currentWeeks.add(weeks.get(i));
+        }
+
+        request.setAttribute("currentWeeks", currentWeeks);
+        request.setAttribute("attendanceRecords", attendanceRecords);
+        request.setAttribute("internName", internDAO.getInternName(userId));
+        request.setAttribute("page", page);
+        request.setAttribute("totalPages", totalPages);
+        request.getRequestDispatcher("detailAttendance.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -1,10 +1,15 @@
+<%-- 
+    Document   : detailAttendance
+    Created on : Jul 14, 2024, 2:41:43 AM
+    Author     : ADMIN
+--%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Attendance Detail</title>
+        <title>Detail Attendance</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -16,9 +21,8 @@
             table.calendar {
                 width: 80%;
                 border-collapse: collapse;
-                margin-top: 20px;
-                margin-left: auto;
-                margin-right: auto;
+                margin-top: 50px;
+                margin-left: 200px;
             }
             table.calendar th, table.calendar td {
                 border: 1px solid #ddd;
@@ -44,30 +48,6 @@
             table.calendar td.weekend {
                 background-color: #e6f7ff;
             }
-            .container {
-                max-width: 500px;
-                margin: 20px auto;
-                padding: 20px;
-                border: 1px solid #ccc;
-                border-radius: 10px;
-                background-color: #f9f9f9;
-            }
-            .message {
-                color: green;
-                font-weight: bold;
-            }
-            .error {
-                color: red;
-                font-weight: bold;
-            }
-            .button {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-            }
             .pagination {
                 margin-top: 20px;
                 text-align: center;
@@ -91,11 +71,10 @@
     <body>
         <jsp:include page="header.jsp"></jsp:include>
 
-        <h4>Attendance for ${internName}</h4>
-
+            <h4 style="margin-top: 40px;">Attendance of ${internName}</h4>
+        <a style="margin-left: 200px" href="attendanceAndSchedule">Back to List</a>
         <table class="calendar">
             <thead>
-                <tr></tr>
                 <tr>
                     <th>Mon</th>
                     <th>Tue</th>
@@ -137,7 +116,8 @@
                 <a href="?user_id=${param.user_id}&page=${page + 1}">Next</a>
             </c:if>
         </div>
-
-        
     </body>
 </html>
+
+
+

@@ -113,6 +113,7 @@
             <table class="messages-table">
                 <thead>
                     <tr>
+                        <th>To</th>
                         <th>Subject</th>
                         <th>Sent Time</th>
                     </tr>
@@ -120,6 +121,7 @@
                 <tbody>
                     <c:forEach var="msg" items="${groupedSubject}">
                         <tr>
+                            <td class="sender"><strong>To:</strong> ${msg.receiverId}</td>
                             <td class="subject">
                                 <a class="message-title" href="askMentor?action=viewMessage&messageId=${msg.messageId}">
                                     ${msg.subject}
