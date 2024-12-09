@@ -15,9 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import models.Account;
+import models.InterviewSchedule;
 import models.Notifications;
 import models.Positions;
 import models.ProjectWithPositions;
+import models.Projects;
 
 /**
  *
@@ -41,10 +43,8 @@ public class HRDAO extends DBContext {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
-
             while (rs.next()) {
                 String projectCode = rs.getString("project_code");
-
                 ProjectWithPositions project = projectMap.get(projectCode);
                 if (project == null) {
                     project = new ProjectWithPositions();
@@ -127,67 +127,6 @@ public class HRDAO extends DBContext {
         return list;
     }
 
-    public void addInterviewShedule(String send_id, String mentor_id, String project_code, Date date_start, Time time, String message, String title, String room) {
-        String query = "INSERT INTO Notifications (sender_id, mentor_id, project_code, message, title, Time, date_start, room) VALUES (?,?, ?, ?, ?, ?, ?, ?)";
-
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, send_id);
-            ps.setString(2, mentor_id);
-            ps.setString(3, project_code);
-            ps.setString(4, message);
-            ps.setString(5, title);
-            ps.setTime(6, time);
-            ps.setDate(7, new java.sql.Date(date_start.getTime()));
-            ps.setString(8, room);
-
-            ps.executeUpdate();
-        } catch (Exception e) {
-        }
-    }
-
-    public void deleteNotificationById(int notificationId) {
-        String query = "DELETE FROM Notifications WHERE notification_id = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, notificationId);
-            ps.executeUpdate();
-        } catch (Exception e) {
-
-        }
-    }
-
-    public List<Notifications> getAllInterviewScheduleByHR(String user_id) {
-        List<Notifications> list = new ArrayList<>();
-        String query = "SELECT * FROM Notifications Where sender_id LIKE ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, user_id);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Notifications(
-                        rs.getInt("notification_id"),
-                        rs.getString("sender_id"),
-                        rs.getString("mentor_id"),
-                        rs.getString("project_code"),
-                        rs.getString("position_code"),
-                        rs.getString("message"),
-                        rs.getString("title"),
-                        rs.getTime("time"),
-                        rs.getDate("date_start"),
-                        rs.getString("room"),
-                        rs.getString("link")
-                ));
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // In lỗi ra console để kiểm tra
-        }
-        return list;
-    }
-
     public void addProjectAndPositions(String projectCode, String projectName, String mentorId, String projectImage, String description, Date projectStartDay, Date projectEndDay, String[] positionNames, int[] positionCounts) throws Exception {
 
         String insertProjectQuery = "INSERT INTO Projects (project_code, project_name, mentor_id, project_img, project_details, project_startday, project_endday) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -240,6 +179,7 @@ public class HRDAO extends DBContext {
         }
     }
 
+    //kiem tra projectCode ton tai khong
     public boolean isProjectCodeExists(String projectCode) {
         String query = "SELECT COUNT(*) FROM projects WHERE project_code LIKE ?";
         try {
@@ -300,5 +240,166 @@ public class HRDAO extends DBContext {
         }
 
         return project;
+    }
+
+    public List<Projects> getAllProjectbyHR() {
+        List<Projects> list = new ArrayList<>();
+        String query = "select * from Projects";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Projects(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getDate(6),
+                        rs.getDate(7)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void createInterviewShedule(String send_id, String mentor_id, String project_code, Date date_start, Time time, String message, String title, String room) {
+        String query = "INSERT INTO [dbo].[InterviewSchedule]\n"
+                + "           ([sender_id]\n"
+                + "           ,[mentor_id]\n"
+                + "           ,[project_code]\n"
+                + "           ,[message]\n"
+                + "           ,[title]\n"
+                + "           ,[Time]\n"
+                + "           ,[date_start]\n"
+                + "           ,[room])\n"
+                + "     VALUES (?,?,?,?,?,?,?,?)";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, send_id);
+            ps.setString(2, mentor_id);
+            ps.setString(3, project_code);
+            ps.setString(4, message);
+            ps.setString(5, title);
+            ps.setTime(6, time);
+            ps.setDate(7, new java.sql.Date(date_start.getTime()));
+            ps.setString(8, room);
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void deleteInterviewScheduleById(int interviewscheduleId) {
+        String query = "DELETE FROM InterviewSchedule WHERE interviewschedule_id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, interviewscheduleId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+
+        }
+    }
+
+    public List<InterviewSchedule> getAllInterviewScheduleByHR(String user_id) {
+        List<InterviewSchedule> list = new ArrayList<>();
+        String query = "SELECT * FROM InterviewSchedule Where sender_id LIKE ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, user_id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new InterviewSchedule(rs.getInt("interviewschedule_id"),
+                        rs.getString("sender_id"),
+                        rs.getString("mentor_id"),
+                        rs.getString("project_code"),
+                        rs.getString("message"),
+                        rs.getString("title"),
+                        rs.getTime("time"),
+                        rs.getDate("date_start"),
+                        rs.getString("room")));
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // In lỗi ra console để kiểm tra
+        }
+        return list;
+    }
+    public boolean isInterviewScheduleExists(String projectCode) {
+        String query = "SELECT COUNT(*) FROM InterviewSchedule \n"
+                + "WHERE project_code LIKE ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, projectCode);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    //update interview schedule
+    public InterviewSchedule getInterviewScheduleById(int interviewScheduleId) {
+        String query = "SELECT *\n"
+                + "FROM InterviewSchedule\n"
+                + "WHERE interviewschedule_id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, interviewScheduleId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new InterviewSchedule(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getTime(7),
+                        rs.getDate(8),
+                        rs.getString(9));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int updateInterviewSchedule(int interviewScheduleId, String send_id, String mentor_id, String project_code, Date date_start, Time time, String message, String title, String room) {
+        String query = "UPDATE [dbo].[InterviewSchedule]\n"
+                + "   SET [sender_id] = ?\n"
+                + "      ,[mentor_id] = ?\n"
+                + "      ,[project_code] = ?\n"
+                + "      ,[message] = ?\n"
+                + "      ,[title] =?\n"
+                + "      ,[Time] = ?\n"
+                + "      ,[date_start] = ?\n"
+                + "      ,[room] = ?\n"
+                + " WHERE [interviewschedule_id] = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, send_id);
+            ps.setString(2, mentor_id);
+            ps.setString(3, project_code);
+            ps.setString(4, message);
+            ps.setString(5, title);
+            ps.setTime(6, time);
+            ps.setDate(7, new java.sql.Date(date_start.getTime()));
+            ps.setString(8, room);
+            ps.setInt(9, interviewScheduleId);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

@@ -25,7 +25,7 @@
     <div class="container">
         <h2>Add Certificate</h2>
         <div class="form-container">
-            <form action="addCertificate" method="post">
+            <form action="addCertificate" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="user_id" value="${sessionScope.account.user_id}">
                 <input type="hidden" name="action" value="add">
 
@@ -40,13 +40,13 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="cer_company" class="form-label">Company:</label>
-                    <input type="text" class="form-control" id="cer_company" name="cer_company" required>
-                </div>
+                    <label for="project_code" class="form-label">Project Code:</label>
+                    <input type="text" class="form-control" id="project_code" name="project_code" value="${projectCode}" disabled>
+                  </div>
 
                 <div class="mb-3">
-                    <label for="cer_img" class="form-label">Image URL:</label>
-                    <input type="text" class="form-control" id="cer_img" name="cer_img">
+                    <label for="cer_img" class="form-label">Image:</label>
+                    <input type="file" class="form-control" id="cer_img" name="cer_img" required>
                 </div>
 
                 <div class="mb-3">
@@ -55,8 +55,12 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="intern_id" class="form-label">Intern ID:</label>
-                    <input type="number" class="form-control" id="intern_id" name="intern_id" required>
+                    <label for="intern_id" class="form-label">Users ID:</label>
+                    <select class="form-control" id="intern_id" name="intern_id" required>
+                     <c:forEach var="intern" items="${listIntern}">
+                            <option value="${intern.internId}">${intern.userId}</option>
+                        </c:forEach>
+                    </select>
                 </div>
 
                 <div class="mb-3">
@@ -66,6 +70,8 @@
                 <button type="submit" class="btn btn-primary">Add Certificate</button>
             </form>
         </div>
+        <h1>Nguyen Viet Anh hfhrfhehrfwfwefoewfbowehfoiewfoewifnownfofnwr</h1>
+        <h2>hêlloooo</h2>
     </div>
     <jsp:include page="footer.jsp"/>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-pflPW7sA7WO8MWByxoO2Zx8pJsxwZEqeq2WXDfD7j4N4sqksE+6DQkApU5Fi58O6" crossorigin="anonymous"></script>

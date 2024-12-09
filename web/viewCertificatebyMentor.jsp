@@ -30,48 +30,79 @@
     </style>
 </head>
 <body>
-    <jsp:include page="header.jsp"/>
-    <div class="container">
-        <h1 class="text-center">Certificate List</h1>
+<jsp:include page="header.jsp"/>
 
-       
-        <table class="table table-bordered table-striped">
-            <thead>
+<div class="container">
+    <a href="chooseProjectCode" class="btn btn-success">Add Certificate</a>
+    <c:if test="${not empty certificates}">
+    <h1 class="text-center">Certificate List</h1>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                
+                <th>Name</th>
+                <th>Issue Date</th>
+                <th>Project Code</th>
+                <th>Image</th>
+                <th>Link</th>
+                <th>Intern Id</th>
+                
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="certificate" items="${certificates}">
                 <tr>
-                    <th>Cert ID</th>
-                    <th>Name</th>
-                    <th>Issue Date</th>                    
-                    <th>Company</th>
-                    <th>Image</th>
-                    <th>Link</th>
-                    <th>Sender ID</th>
-                    <th>Action</th> 
+                    
+                    <td>${certificate.cerName}</td>
+                    <td><fmt:formatDate value="${certificate.issueDate}" pattern="yyyy-MM-dd"/></td>
+                    <td>${certificate.projectCode}</td>
+                    <td><img src="${certificate.cerImg}" alt="Certificate Image"/></td>
+                    <td><a href="${certificate.cerLink}" target="_blank">Link Certificate</a></td>
+                    <td>${certificate.internId}</td>
+                    
+                    <td>
+                        <a href="getCertificate?cer_id=${certificate.cerId}" class="btn btn-primary">Edit</a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="certificate" items="${certificates}">
-                    <tr>
-                        <td>${certificate.certId}</td>
-                        <td>${certificate.cerName}</td>
-                        <td><fmt:formatDate value="${certificate.issueDate}" pattern="yyyy-MM-dd"/></td>                        
-                        <td>${certificate.cerCompany}</td>
-                        <td><img src="${certificate.cerImg}" alt="Certificate Image"/></td>
-                        <td><a href="${certificate.cerLink}" target="_blank">View Certificate</a></td>
-                        <td>${certificate.senderId}</td>
-                        <td>
-                            <a href="getCertificate?cer_id=${certificate.certId}" >Edit</a>
-                        </td>
-                    </tr>
-                </c:forEach>
+            </c:forEach>
+        </tbody>
+    </table>
+    </c:if>
+    
 
-            </tbody>
-        </table>
-
-        
-        <a href="addCertificate.jsp" class="btn btn-primary">Add Certificate</a>
-    </div>
-    <%--<jsp:include page="footer.jsp"/>--%>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-pflPW7sA7WO8MWByxoO2Zx8pJsxwZEqeq2WXDfD7j4N4sqksE+6DQkApU5Fi58O6" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIqKaWPL5SBRO14AOp5L6bL5w5fqLc1LHK/6VqqKnv1PAdOBVzI" crossorigin="anonymous"></script>
+            <c:if test="${not empty listProject}">
+                    <h3 class="text-center">Choose Project you want add Certificate</h3>
+                    <div class="col-lg-12 table-responsive mb-5">
+                        <table class="table table-bordered text-center mb-0">
+                            <thead class="bg-secondary text-dark">
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Project Name</th>
+                                    <th>Project Code</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="align-middle">
+                                <c:forEach items="${listProject}" var="project">
+                                    <tr>
+                                        <td class="align-middle"><img style="width: 100px" class="img-fluid" src="${project.projectImg}"/></td>
+                                        <td class="align-middle">${project.projectName}</td>
+                                        <td class="align-middle">${project.projectCode}</td>
+                                        <td class="align-middle">
+                                            <a href="addCertificate?projectCode=${project.projectCode}">Choose</a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </c:if>
+                    
+                    </div>
+<%--<jsp:include page="footer.jsp"/>--%>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-pflPW7sA7WO8MWByxoO2Zx8pJsxwZEqeq2WXDfD7j4N4sqksE+6DQkApU5Fi58O6" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIqKaWPL5SBRO14AOp5L6bL5w5fqLc1LHK/6VqqKnv1PAdOBVzI" crossorigin="anonymous"></script>
 </body>
 </html>

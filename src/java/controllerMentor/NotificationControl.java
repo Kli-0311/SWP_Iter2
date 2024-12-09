@@ -41,17 +41,39 @@ public class NotificationControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet NotificationControl</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet NotificationControl at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String service = request.getParameter("service");
+        request.setAttribute("notificationControl", "Yes");
+        Account acc = (Account) request.getSession().getAttribute("account");
+        String user_id = acc.getUser_id();
+        String projectCodeStr = request.getParameter("projectCode");
+
+        if (service == null) {
+            service = "listAll";
+        }
+        if (service.equals("listAll")) {
+            List<Notifications> notification = (new MentorDAO()).getAllNotificationByMentor(projectCodeStr);
+            request.setAttribute("allNotification", notification);
+            request.setAttribute("projectCode", projectCodeStr);
+            request.getRequestDispatcher("Notification.jsp").forward(request, response);
+        }
+        if (service.equals("requestInsert")) {
+            String projectCode = request.getParameter("projectCode");
+            List<Positions> listPosition = (new MentorDAO()).getAllPositionByProjectCode(projectCodeStr);
+            request.setAttribute("projectCode", projectCode);
+            request.setAttribute("listPosition", listPosition);
+            request.setAttribute("createNotification", "createNotification");
+            request.getRequestDispatcher("CreateNotification.jsp").forward(request, response);
+        }
+        if (service.equals("deleteNotification")) {
+            String notificationIdStr = request.getParameter("notificationId");
+            String projectCode = request.getParameter("projectCode");
+            int notificationId = Integer.parseInt(notificationIdStr);
+            MentorDAO dao = new MentorDAO();
+            dao.deleteNotificationById(notificationId);
+            List<Notifications> list = (new MentorDAO()).getAllNotificationByMentor(projectCode);
+            request.setAttribute("projectCode", projectCode);
+            request.setAttribute("allNotification", list);
+            request.getRequestDispatcher("Notification.jsp").forward(request, response);
         }
     }
 
@@ -67,54 +89,7 @@ public class NotificationControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String service = request.getParameter("service");
-        request.setAttribute("notification", "Yes");
-        Account acc = (Account) request.getSession().getAttribute("account");
-        String user_id = acc.getUser_id();
-        if (service == null) {
-            service = "listAll";
-        }
-        if (service.equals("listAll")) {
-            List<Notifications> notification = (new MentorDAO()).getAllNotificationByMentor(user_id);
-            request.setAttribute("allNotification", notification);
-            request.getRequestDispatcher("Notification.jsp").forward(request, response);
-        }
-        if (service.equals("requestInsert")) {
-            List<Projects> listProject = (new MentorDAO()).getALLProjectByMentor(user_id);
-            List<Positions> listPosition = (new MentorDAO()).getAllPositionByMentor(user_id);
-            request.setAttribute("listPosition",listPosition);
-            request.setAttribute("listProject", listProject);
-            request.setAttribute("createNotification", "createNotification");
-            request.getRequestDispatcher("Notification.jsp").forward(request, response);
-        }
-        if (service.equals("sendInsertDetail")) {
-            String sendId = request.getParameter("send_id");
-            String projectCode = request.getParameter("project_code");
-            String positionCode = request.getParameter("position_code");
-            String dateStr = request.getParameter("date");
-            String timeStr = request.getParameter("time");
-
-            String message = request.getParameter("message");
-            String title = request.getParameter("title");
-            String room = request.getParameter("room");
-            String link = request.getParameter("link");
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Time time = Time.valueOf(timeStr);
-            try {
-                Date dateStart = dateFormat.parse(dateStr);
-
-                MentorDAO dao = new MentorDAO();
-                dao.addNotification(sendId, projectCode, positionCode, dateStart, time, message, title, room, link);
-                request.setAttribute("InsertDone", "Insert Successful!");
-            } catch (ParseException e) {
-                request.setAttribute("InsertDone", "Insert failed: Invalid date or time format.");
-            } catch (Exception e) {
-                request.setAttribute("InsertDone", "Insert failed: " + e.getMessage());
-            }
-
-            response.sendRedirect("notification");
-        }
+        processRequest(request, response);
     }
 
     /**

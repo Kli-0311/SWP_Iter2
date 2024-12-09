@@ -9,48 +9,89 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Notifications</title>
+        <style>
+            body, h1, h2, h3, p, ul, ol, li, img {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f8f9fa;
+                color: #333;
+                line-height: 1.6;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                width: 80%;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: flex-start;
+                padding: 20px;
+            }
+            .main-content {
+                width: 100%;
+            }
+            .notification-header {
+                color: #343a40;
+                margin-bottom: 20px;
+            }
+            .notification-item {
+                margin-bottom: 20px;
+                padding: 10px;
+                background-color: #ffffff;
+                border: 1px solid #dee2e6;
+                border-radius: 5px;
+                transition: transform 0.2s;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .notification-item:hover {
+                transform: scale(1.02);
+            }
+            .notification-item h2 {
+                color: #007bff;
+                font-size: 1.2rem;
+                margin-bottom: 5px;
+            }
+            .notification-item p {
+                margin-bottom: 10px;
+                color: #666;
+            }
+            .notification-item a {
+                text-decoration: none;
+                color: inherit;
+            }
+            .notification-item a:hover {
+                text-decoration: underline;
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include>
         <c:if test="${sessionScope.account.role_id == 5}">
             <div class="container">
-                <h1 class="font-weight-semi-bold text-uppercase mb-3 text-center">
+                <h1 class="font-weight-semi-bold text-uppercase mb-3 notification-header">
                     Notifications
                 </h1>
-                <c:if test="${empty listNotification}">No notifications available.</c:if>
+                <c:if test="${empty listNotification}">
+                    <p>No notifications available.</p>
+                </c:if>
                 <c:if test="${not empty listNotification}">
-                    <div class="col-lg-12 table-responsive mb-5">
-                        <table class="table table-bordered text-center mb-0">
-                            <thead class="bg-secondary text-dark">
-                                <tr>
-                                    <th>Mentor ID</th>
-                                    <th>Project Code</th>
-                                    <th>Position Code</th>
-                                    <th>Room</th>
-                                    <th>Time</th>
-                                    <th>Date</th>
-                                    <th>Title</th>
-                                    <th>Message</th>
-                                    <th>Link</th>
-                                </tr>
-                            </thead>
-                            <tbody class="align-middle">
-                                <c:forEach items="${listNotification}" var="view">
-                                    <tr>
-                                        <td class="align-middle">${view.sender_id}</td>
-                                        <td class="align-middle">${view.project_code}</td>
-                                        <td class="align-middle">${view.position_code}</td>
-                                        <td class="align-middle">${view.room}</td>
-                                        <td class="align-middle">${view.time}</td>
-                                        <td class="align-middle">${view.date_start}</td>
-                                        <td class="align-middle">${view.title}</td>
-                                        <td class="align-middle">${view.message}</td>
-                                        <td class="align-middle">${view.link}</td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                    <div class="main-content">
+                        <c:forEach items="${listNotification}" var="view">
+                            <div class="notification-item ">
+                                <a href="detailNotification?notificationId=${view.notification_id}">
+                                    <h2>${view.title}</h2>
+                                    <p>Published Date: ${view.published_date}</p>
+                                </a>
+                            </div>
+                        </c:forEach>
                     </div>
                 </c:if>
             </div>

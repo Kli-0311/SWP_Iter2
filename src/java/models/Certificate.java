@@ -3,34 +3,36 @@ package models;
 import java.util.Date;
 
 public class Certificate {
-    private int cerId; 
+    private int cerId;
     private String cerName;
     private Date issueDate;
-    private String cerCompany;
+    private String projectCode;  
     private String cerImg;
     private String cerLink;
     private int internId;
     private String senderId;
 
+
     public Certificate() {}
 
-    public Certificate(int cerId, String cerName, Date issueDate, String cerCompany, String cerImg, String cerLink, int internId, String senderId) {
+    public Certificate(int cerId, String cerName, Date issueDate, String projectCode, String cerImg, String cerLink, int internId, String senderId) {
         this.cerId = cerId;
         this.cerName = cerName;
         this.issueDate = issueDate;
-        this.cerCompany = cerCompany;
+        this.projectCode = projectCode;
         this.cerImg = cerImg;
         this.cerLink = cerLink;
         this.internId = internId;
-        this.senderId = senderId; 
+        this.senderId = senderId;
     }
 
-    public int getCertId() {
+    // Getters and Setters
+    public int getCerId() {
         return cerId;
     }
 
-    public void setCertId(int certId) {
-        this.cerId = certId;
+    public void setCerId(int cerId) {
+        this.cerId = cerId;
     }
 
     public String getCerName() {
@@ -49,12 +51,12 @@ public class Certificate {
         this.issueDate = issueDate;
     }
 
-    public String getCerCompany() {
-        return cerCompany;
+    public String getProjectCode() {
+        return projectCode;
     }
 
-    public void setCerCompany(String cerCompany) {
-        this.cerCompany = cerCompany;
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
     }
 
     public String getCerImg() {

@@ -26,7 +26,6 @@ public class ViewNotificationByIntern extends HttpServlet {
 
     }
 
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -36,7 +35,7 @@ public class ViewNotificationByIntern extends HttpServlet {
             List<Notifications> listNotification = dao.getAllNotificationByIntern(userId);
             request.setAttribute("listNotification", listNotification);
             request.getRequestDispatcher("ViewNotificationByIntern.jsp").forward(request, response);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

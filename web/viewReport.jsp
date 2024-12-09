@@ -52,7 +52,7 @@
                             <td>${report.projectCode}</td>
                             <td>${report.mentorId}</td>
                             <td>
-                                <a href="editReport.jsp?intern_id=${report.internId}&week=${report.week}&report=${report.report}&report_link=${report.reportLink}&mentor_id=${report.mentorId}&project_code=${report.projectCode}" class="btn btn-primary">Edit</a>
+                                <a href="editReport?reportId=${report.reportId}" class="btn btn-primary btn-sm">Edit</a>
                             </td> 
                         </tr>
                     </c:forEach>
@@ -60,7 +60,7 @@
             </table>
         </div>
     </div>
-    <a href="submitReport.jsp" class="btn btn-primary">Submit Report</a>
+    <a href="submitReport" class="btn btn-primary">Submit Report</a>
 </div>
 </body>
 </html>

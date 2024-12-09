@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import models.Applications;
 import models.CandidateApply;
+import models.InterviewSchedule;
 import models.Notifications;
+import models.ProjectPass;
 
 /**
  *
@@ -55,33 +57,6 @@ public class CandidateDAO extends DBContext {
         return null; // Trả về null nếu không tìm thấy kết quả
     }
 
-    public Notifications getInterviewScheduleByProjectCode(String projectCode) {
-        String query = "select * from Notifications n\n"
-                + "where n.project_code LIKE ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, projectCode);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                return new Notifications(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getTime(8),
-                        rs.getDate(9),
-                        rs.getString(10),
-                        rs.getString(11));
-            }
-        } catch (Exception e) {
-
-        }
-        return null;
-    }
-
     public List<CandidateApply> getAllCandidateApplyByPositionCode(String positionCode) {
         List<CandidateApply> list = new ArrayList<>();
         String query = "select u.user_id, u.full_name,u.specialization\n"
@@ -121,12 +96,68 @@ public class CandidateDAO extends DBContext {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getDate(6),
-                        rs.getString(7),
+                        rs.getString(6),
+                        rs.getDate(7),
                         rs.getString(8),
-                        rs.getString(9)));
+                        rs.getString(9),
+                        rs.getString(10)));
             }
 
+        } catch (Exception e) {
+
+        }
+        return list;
+    }
+
+    //view lich phong van
+    public List<InterviewSchedule> getInterviewScheduleByUserId(String userId) {
+        List<InterviewSchedule> list = new ArrayList<>();
+        String query = "Select * \n"
+                + "from InterviewSchedule i\n"
+                + "join Applications a on i.project_code = a.project_code\n"
+                + "where a.applicant_id LIKE ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new InterviewSchedule(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getTime(7),
+                        rs.getDate(8),
+                        rs.getString(9)));
+            }
+        } catch (Exception e) {
+
+        }
+        return list;
+    }
+    public List<ProjectPass> getAllProjectPass(String userId) {
+        List<ProjectPass> list = new ArrayList<>();
+        String query = "Select p.project_code, p.project_name, p.mentor_id, p.project_details, p.project_img , p.project_startday, p.project_endday, a.position_code\n"
+                + "from Projects p\n"
+                + "join Applications a on p.project_code = a.project_code\n"
+                + "where a.status = 'Done' and a.applicant_id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new ProjectPass(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getDate(6),
+                        rs.getDate(7),
+                        rs.getString(8)));
+            }
         } catch (Exception e) {
 
         }

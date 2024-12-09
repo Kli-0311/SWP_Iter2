@@ -1,7 +1,6 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,15 +31,13 @@
     <div class="container mt-5">
         <h2 class="mb-4">Submit Report</h2>
 
-        <c:if test="${not empty error}">
-            <div class="alert alert-danger">${error}</div>
-        </c:if>
+        
 
         <form action="submitReport" method="post">
             <input type="hidden" name="user_id" value="${sessionScope.account.user_id}">
             <div class="mb-3">
                 <label for="week" class="form-label">Week</label>
-                <input type="number" class="form-control" id="week" name="week" min="1" required>
+                <input type="number" class="form-control" id="week" name="week" min="1" max="10" placeholder="1" required>
             </div>
             <div class="mb-3">
                 <label for="report" class="form-label">Report</label>
@@ -50,19 +47,17 @@
                 <label for="report_link" class="form-label">Report Link</label>
                 <input type="text" class="form-control" id="report_link" name="report_link" required>
             </div>
-            <div class="mb-3">
-                <label for="mentor_id" class="form-label">Mentor ID</label>
-                <input type="text" class="form-control" id="mentor_id" name="mentor_id" required>
-            </div>
+            
             <div class="mb-3">
                 <label for="project_code" class="form-label">Project Code</label>
-                <input type="text" class="form-control" id="project_code" name="project_code" required>
+                <select class="form-control" id="project_code" name="project_code" required>
+                    <c:forEach var="project" items="${project}">
+                        <option value="${project.projectCode}">${project.projectCode}</option>
+                    </c:forEach>
+                </select>
             </div>
             <button type="submit" class="btn btn-primary">Submit Report</button>
         </form>
     </div>
-
-    <%--<jsp:include page="footer.jsp"></jsp:include>--%>
-
 </body>
 </html>

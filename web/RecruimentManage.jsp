@@ -107,7 +107,7 @@ Author     : admin
 
                 <!--thong bao create thanh cong or khong-->
                 <c:if test="${InsertDone ne null}">
-                    <h3 class="font-weight-semi-bold text-uppercase mb-3 text-center">
+                    <h3 class="font-weight-semi-bold mb-3 text-center">
                         ${InsertDone}
                     </h3>
                 </c:if>
@@ -164,7 +164,7 @@ Author     : admin
                                             </c:otherwise>
                                         </c:choose>
                                         <td class="align-middle">
-                                            <a href="deleteControl?service=deleteProject&project_code=${project.projectCode}" onclick="return confirmDelete('${project.projectCode}')">Delete</a>
+                                            <a href="deleteControll?service=deleteProject&project_code=${project.projectCode}" onclick="return confirmDelete('${project.projectCode}')">Delete</a>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -178,7 +178,7 @@ Author     : admin
                         }
                     </script>
                 </c:if>
-               
+
             </c:if>
         </div>
         <jsp:include page="footer.jsp"></jsp:include>
@@ -186,6 +186,6 @@ Author     : admin
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
                 integrity="sha384-Vk1pRXs9kaQwgj/+4dcABGpK/Ko1y9lOjp1z7ieQ5LRUjAg3BoR1GIVCNUyHfxiN" 
         crossorigin="anonymous"></script>
-       
+
     </body>
 </html>

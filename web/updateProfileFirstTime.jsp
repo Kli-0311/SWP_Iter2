@@ -53,7 +53,7 @@
 
                 <p>${messErrorPass} </p>
                 <p>${messErrorUsername}</p>
-                <p>${messErrorFullName}</p>
+                <p>${messErrorPhone}</p>
                 <p>${messErrorDob}</p>
                 <p>${messErrorAvatar}</p>   
             </form>

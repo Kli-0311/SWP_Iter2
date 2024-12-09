@@ -39,7 +39,7 @@
                     
                     <th>Name</th>
                     <th>Issue Date</th>                    
-                    <th>Company</th>
+                    <th>Project Code</th>
                     <th>Image</th>
                     <th>Link</th>
                     <th>Sender ID</th>
@@ -51,7 +51,7 @@
                         <td>${certificate.cerName}</td>
                         <td><fmt:formatDate value="${certificate.issueDate}" pattern="yyyy-MM-dd"/></td>
                         
-                        <td>${certificate.cerCompany}</td>
+                        <td>${certificate.projectCode}</td>
                         <td><img src="${certificate.cerImg}" alt="Certificate Image"/></td>
                         <td><a href="${certificate.cerLink}" target="_blank">View Certificate</a></td>
                         <td>${certificate.senderId}</td>

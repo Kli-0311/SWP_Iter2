@@ -12,7 +12,9 @@ import java.util.Date;
  */
 public class CandidateApply {
 
+    private int appli_id;
     private String userId;
+    private String username;
     private String projectCode;
     private String positionCode;
     private String status;
@@ -35,8 +37,23 @@ public class CandidateApply {
 
     }
 
-    public CandidateApply(String userId, String projectCode, String positionCode, String status, String full_name, Date dob, String gender, String phone_number, String avatar, String specialization, byte is_active, String certificate) {
+    public CandidateApply(String username, String projectCode, String positionCode, String status, String userId, String full_name, Date dob, String gender, String phone_number, String specialization) {
+        this.username = username;
+        this.projectCode = projectCode;
+        this.positionCode = positionCode;
+        this.status = status;
         this.userId = userId;
+        this.full_name = full_name;
+        this.dob = dob;
+        this.gender = gender;
+        this.phone_number = phone_number;
+        this.specialization = specialization;
+    }
+
+    public CandidateApply(int appli_id, String userId, String username, String projectCode, String positionCode, String status, String full_name, Date dob, String gender, String phone_number, String avatar, String specialization, byte is_active, String certificate) {
+        this.appli_id = appli_id;
+        this.userId = userId;
+        this.username = username;
         this.projectCode = projectCode;
         this.positionCode = positionCode;
         this.status = status;
@@ -50,17 +67,12 @@ public class CandidateApply {
         this.certificate = certificate;
     }
 
-    public CandidateApply(String projectCode, String positionCode, String status, String userId, String full_name, Date dob, String gender, String phone_number, String specialization) {
+    public int getAppli_id() {
+        return appli_id;
+    }
 
-        this.projectCode = projectCode;
-        this.positionCode = positionCode;
-        this.status = status;
-        this.userId = userId;
-        this.full_name = full_name;
-        this.dob = dob;
-        this.gender = gender;
-        this.phone_number = phone_number;
-        this.specialization = specialization;
+    public void setAppli_id(int appli_id) {
+        this.appli_id = appli_id;
     }
 
     public String getUserId() {
@@ -69,6 +81,14 @@ public class CandidateApply {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getProjectCode() {
@@ -97,9 +117,7 @@ public class CandidateApply {
 
     public String getFull_name() {
         return full_name;
-    }
-
-    public void setFull_name(String full_name) {
+    }public void setFull_name(String full_name) {
         this.full_name = full_name;
     }
 
@@ -151,12 +169,11 @@ public class CandidateApply {
         this.is_active = is_active;
     }
 
-    public String getCertiicate() {
+    public String getCertificate() {
         return certificate;
     }
 
-    public void setCertiicate(String certiicate) {
-        this.certificate = certiicate;
+    public void setCertificate(String certificate) {
+        this.certificate = certificate;
     }
-
 }

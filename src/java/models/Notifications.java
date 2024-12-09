@@ -13,33 +13,35 @@ import java.sql.Time;
  */
 public class Notifications {
 
-    private int notification_id;
+   private int notification_id;
     private String sender_id;
-    private String mentor_id;
     private String project_code;
     private String position_code;
     private String message;
     private String title;
     private Time time;
     private Date date_start;
+    private Date published_date;
     private String room;
     private String link;
+    private String receiver_id;
 
     public Notifications() {
     }
 
-    public Notifications(int notification_id, String sender_id, String mentor_id, String project_code, String position_code, String message, String title, Time time, Date date_start, String room, String link) {
+    public Notifications(int notification_id, String sender_id, String project_code, String position_code, String message, String title, Time time, Date date_start, Date published_date, String room, String link, String receiver_id) {
         this.notification_id = notification_id;
         this.sender_id = sender_id;
-        this.mentor_id = mentor_id;
         this.project_code = project_code;
         this.position_code = position_code;
         this.message = message;
         this.title = title;
         this.time = time;
         this.date_start = date_start;
+        this.published_date = published_date;
         this.room = room;
         this.link = link;
+        this.receiver_id = receiver_id;
     }
 
     public int getNotification_id() {
@@ -56,14 +58,6 @@ public class Notifications {
 
     public void setSender_id(String sender_id) {
         this.sender_id = sender_id;
-    }
-
-    public String getMentor_id() {
-        return mentor_id;
-    }
-
-    public void setMentor_id(String mentor_id) {
-        this.mentor_id = mentor_id;
     }
 
     public String getProject_code() {
@@ -114,6 +108,14 @@ public class Notifications {
         this.date_start = date_start;
     }
 
+    public Date getPublished_date() {
+        return published_date;
+    }
+
+    public void setPublished_date(Date published_date) {
+        this.published_date = published_date;
+    }
+
     public String getRoom() {
         return room;
     }
@@ -128,6 +130,14 @@ public class Notifications {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getReceiver_id() {
+        return receiver_id;
+    }
+
+    public void setReceiver_id(String receiver_id) {
+        this.receiver_id = receiver_id;
     }
 
    

@@ -12,19 +12,22 @@ public class Messages {
     private String receiverId;
     private String message;
     private Timestamp timestamp;
+    private String subject;
+
 
     public Messages() {
     }
 
-    public Messages(int messageId, String senderId, String receiverId, String message, Timestamp timestamp) {
+    public Messages(int messageId, String senderId, String receiverId, String message, Timestamp timestamp, String subject) {
         this.messageId = messageId;
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.message = message;
         this.timestamp = timestamp;
+        this.subject = subject;
     }
 
-    // Getters và Setters
+    // Getters and Setters
 
     public int getMessageId() {
         return messageId;
@@ -65,4 +68,13 @@ public class Messages {
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
 }

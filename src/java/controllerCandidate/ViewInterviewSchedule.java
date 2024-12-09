@@ -14,8 +14,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import models.Account;
 import models.Applications;
 import models.CandidateApply;
+import models.InterviewSchedule;
 import models.Notifications;
 
 /**
@@ -42,10 +44,12 @@ public class ViewInterviewSchedule extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String projectCode = request.getParameter("projectCode");
+        String userId = request.getParameter("userId");
+        Account acc = (Account) request.getSession().getAttribute("account");
+        String user_id = acc.getUser_id();
         try {
             CandidateDAO dao = new CandidateDAO();
-            Notifications viewInterview = dao.getInterviewScheduleByProjectCode(projectCode);
+            List<InterviewSchedule> viewInterview = dao.getInterviewScheduleByUserId(user_id);
             request.setAttribute("viewInterview", viewInterview);
             request.getRequestDispatcher("InterviewSchedule.jsp").forward(request, response);
         } catch (Exception e) {

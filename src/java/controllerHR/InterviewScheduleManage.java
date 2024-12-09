@@ -17,8 +17,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import models.Account;
+import models.InterviewSchedule;
 import models.Notifications;
 import models.ProjectWithPositions;
+import models.Projects;
 
 /**
  *
@@ -57,50 +59,29 @@ public class InterviewScheduleManage extends HttpServlet {
             throws ServletException, IOException {
         String service = request.getParameter("service");
         request.setAttribute("interviewScheduleManage", "Yes");
+        Account acc = (Account) request.getSession().getAttribute("account");
+        String user_id = acc.getUser_id();
         if (service == null) {
             service = "listAll";
         }
         if (service.equals("listAll")) {
-            Account acc = (Account) request.getSession().getAttribute("account");
-            String user_id = acc.getUser_id();
-            List<Notifications> notification = (new HRDAO()).getAllInterviewScheduleByHR(user_id);
-            request.setAttribute("allInterviewSchedule", notification);
+            List<InterviewSchedule> list = (new HRDAO()).getAllInterviewScheduleByHR(user_id);
+            request.setAttribute("allInterviewSchedule", list);
             request.getRequestDispatcher("InterviewSchedule.jsp").forward(request, response);
         }
-        if (service.equals("requestInsert")) {
-            List<ProjectWithPositions> listProject = (new HRDAO()).getAllProjectsWithPositions();
-            List<Account> listMentor = (new HRDAO()).getAllMentor();
-            request.setAttribute("listMentor", listMentor);
+        if (service.equals("chooseProject")) {
+            List<Projects> listProject = (new HRDAO()).getAllProjectbyHR();
             request.setAttribute("listProject", listProject);
-            request.setAttribute("createInterviewSchedule", "createInterviewSchedule");
             request.getRequestDispatcher("InterviewSchedule.jsp").forward(request, response);
         }
-        if (service.equals("sendInsertDetail")) {
-            String sendId = request.getParameter("send_id");
-            String mentorId = request.getParameter("mentor_id");
-            String projectCode = request.getParameter("project_code");
-            String dateStr = request.getParameter("date");
-            String timeStr = request.getParameter("time");
-
-            String message = request.getParameter("message");
-            String title = request.getParameter("title");
-            String room = request.getParameter("room");
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Time time = Time.valueOf(timeStr);
-            try {
-                Date dateStart = dateFormat.parse(dateStr);
-
-                HRDAO dao = new HRDAO();
-                dao.addInterviewShedule(sendId, mentorId, projectCode, dateStart, time, message, title, room);
-                request.setAttribute("InsertDone", "Insert Successful!");
-            } catch (ParseException e) {
-                request.setAttribute("InsertDone", "Insert failed: Invalid date or time format.");
-            } catch (Exception e) {
-                request.setAttribute("InsertDone", "Insert failed: " + e.getMessage());
-            }
-
-            response.sendRedirect("interviewScheduleManage");
+        // goi form create Interview Schedule
+        if (service.equals("requestInsert")) {
+            String mentorId = request.getParameter("mentorId");
+            String projectCode = request.getParameter("projectCode");
+            request.setAttribute("listMentor", mentorId);
+            request.setAttribute("listProject", projectCode);
+            request.setAttribute("createInterviewSchedule", "createInterviewSchedule");
+            request.getRequestDispatcher("CreateInterviewSchedule.jsp").forward(request, response);
         }
     }
 

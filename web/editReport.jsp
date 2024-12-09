@@ -1,4 +1,5 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -26,34 +27,31 @@
                 <form action="submitReport" method="post">
                     <input type="hidden" name="user_id" value="${sessionScope.account.user_id}">
                     <input type="hidden" name="action" value="edit">
-
+                    <input type="hidden" name="reportId" value="${report.reportId}">
+                    
                     <div class="mb-3">
-                        <label for="week" class="form-label">Week:</label>
-                        <input type="number" class="form-control" id="week" name="week" value="${report.week}" required>
+                        <label for="week" class="form-label">Week</label>
+                        <input type="number" class="form-control" id="week" name="week" value="${report.week}" disabled>
                     </div>
-
                     <div class="mb-3">
-                        <label for="report" class="form-label">Report:</label>
-                        <textarea class="form-control" id="report" name="report" rows="5" required>${report.report}</textarea>
+                        <label for="report" class="form-label">Report</label>
+                        <textarea class="form-control" id="report" name="report" rows="3" required>${report.report}</textarea>
                     </div>
-
                     <div class="mb-3">
-                        <label for="report_link" class="form-label">Report Link:</label>
-                        <input type="text" class="form-control" id="report_link" name="report_link" value="${report.reportLink}">
+                        <label for="report_link" class="form-label">Report Link</label>
+                        <input type="text" class="form-control" id="report_link" name="report_link" value="${report.reportLink}" required>
                     </div>
-
                     <div class="mb-3">
-                        <label for="mentor_id" class="form-label">Mentor ID:</label>
-                        <input type="text" class="form-control" id="mentor_id" name="mentor_id" value="${report.mentorId}" required>
+                        <label for="project_code" class="form-label">Project Code</label>
+                        <select class="form-control" id="project_code" name="project_code" disabled>
+                            <c:forEach var="project" items="${project}">
+                                <option value="${project.projectCode}" ${project.projectCode == report.projectCode ? 'selected' : ''}>${project.projectCode}</option>
+                            </c:forEach>
+                        </select>
+                        <input type="hidden" name="project_code" value="${report.projectCode}">
                     </div>
-
-                    <div class="mb-3">
-                        <label for="project_code" class="form-label">Project Code:</label>
-                        <input type="text" class="form-control" id="project_code" name="project_code" value="${report.projectCode}" required>
-                    </div>
-
                     <button type="submit" class="btn btn-primary">Update Report</button>
-
+                </form>
             </div>
         </div>
         <jsp:include page="footer.jsp"/>

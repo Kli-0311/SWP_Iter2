@@ -24,7 +24,7 @@ public class Account {
     private int role_id;
     private byte is_active;
 
-    public Account(String string, String string1, String string2, String string3, Date date, String string4, String string5, String string6, String string7, int aInt, byte aByte, String string8) {
+    public Account() {
     }
 
     public Account(String user_id, String username, String password, String full_name, Date dob, String gender, String phone_number, String avatar, String specialization, int role_id, byte is_active) {
@@ -39,6 +39,10 @@ public class Account {
         this.specialization = specialization;
         this.role_id = role_id;
         this.is_active = is_active;
+    }
+
+    public Account(int userId, String username, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     public String getUser_id() {
